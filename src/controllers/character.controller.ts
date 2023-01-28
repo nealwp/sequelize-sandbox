@@ -2,10 +2,15 @@ import { CharacterCreationAttributes } from "../@types/character.types";
 import { Character } from "../models/character.model";
 
 
-const createCharacter = async(character: CharacterCreationAttributes) => {
+const create = async(character: CharacterCreationAttributes) => {
     return await Character.create(character)
 }
 
+const getAll = async () => {
+    return await Character.findAll()
+}
+ 
 export default {
-    createCharacter
+    create,
+    getAll
 }

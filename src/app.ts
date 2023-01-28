@@ -7,6 +7,8 @@ const newCharacter: CharacterCreationAttributes = {
     age: 27
 }
 
-db.initialize().then(() => {
-    characters.createCharacter(newCharacter)
+db.initialize().then(async () => {
+    await characters.create(newCharacter)
+    const result = await characters.getAll()
+    console.log(result[0].name)
 })
