@@ -12,6 +12,8 @@
   "author": "nealwp",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@types/validator": "^13.7.11",
     "nodemon": "^2.0.20",
     "pg": "^8.9.0",
     "pg-hstore": "^2.3.4",
@@ -19,5 +21,8 @@
     "sequelize-typescript": "^2.1.5",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
   }
 }

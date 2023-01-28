@@ -1,4 +1,6 @@
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
+import * as models from './models'
+
 import * as path from 'path'
 
 const config = {
@@ -22,13 +24,15 @@ const dbConfig: SequelizeOptions = {
     idle: 30000,
     acquire: 60000,
   },
-  models: [path.join(__dirname + '/models')],
+  models: Object.values(models),
 };
 
 const sequelize = new Sequelize(dbConfig);
 
 async function initialize() {
-  return await sequelize.authenticate();
+  await sequelize.authenticate();
+  await sequelize.sync({ alter: true });
+  console.log("All models were synchronized successfully.");
 }
 
 export { initialize }
