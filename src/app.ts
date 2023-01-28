@@ -10,5 +10,5 @@ const newCharacter: CharacterCreationAttributes = {
 db.initialize().then(async () => {
     await characters.create(newCharacter)
     const result = await characters.getAll()
-    console.log(result[0].name)
+    console.log(result)
 })
