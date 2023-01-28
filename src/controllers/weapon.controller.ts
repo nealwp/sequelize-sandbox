@@ -1,3 +1,4 @@
+import { Controller } from "../@types/controller.types";
 import { WeaponCreationAttributes, WeaponAttributes } from "../@types/weapon.types";
 import { Weapon } from "../models";
 
@@ -9,7 +10,9 @@ const getAll = async (): Promise<Weapon[]> => {
     return await Weapon.findAll()
 }
  
-export {
+const weapons: Controller<Weapon, WeaponCreationAttributes> = {
     create,
     getAll
 }
+
+export default weapons
