@@ -9,6 +9,10 @@
   "author": "nealwp",
   "license": "ISC",
   "devDependencies": {
+    "nodemon": "^2.0.20",
+    "pg": "^8.9.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.28.0",
     "typescript": "^4.9.4"
   }
 }
