@@ -1,4 +1,5 @@
 import { CharacterCreationAttributes } from "../@types/character.types";
+import { Controller } from "../@types/controller.types";
 import { Character } from "../models/character.model";
 
 
@@ -9,8 +10,10 @@ const create = async(character: CharacterCreationAttributes) => {
 const getAll = async () => {
     return await Character.findAll()
 }
- 
-export default {
+
+const weapons: Controller<Character, CharacterCreationAttributes> = {
     create,
     getAll
 }
+
+export default weapons
