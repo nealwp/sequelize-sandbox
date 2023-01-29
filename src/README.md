@@ -33,6 +33,22 @@ The root folder for the project source code.
 
 - **routes** - These define the URL routes for your Express application. Every model should have one corresponding `*.routes.ts` file.
 
+## app.ts
+
+This file is the entrypoint for the application. It is responsible for:
+- Initializing the Sequelize instance
+- Starting the Express server
+
+## db.ts
+
+This file sets up the Sequelize configuration and defines the `initialize` function.
+
+## server.ts
+
+This file is responsible for setting up the Express server, which includes loading the routes and middleware. 
+
+It's important to note that this file *does not start the server*, but rather exports an Express instance. This makes it easier for us to write unit tests against our endpoints with libraries like `supertest`.  
+
 ## Index Files
 
 Each directory has an `index.ts` that imports and exports everything in that folder. This pattern helps keep imports tidy.
