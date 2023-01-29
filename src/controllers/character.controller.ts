@@ -1,6 +1,5 @@
-import { CharacterCreationAttributes } from "../@types/character.types";
-import { Controller } from "../@types/controller.types";
-import { Inventory } from "../models";
+import { CharacterController, CharacterCreationAttributes } from "../@types/character.types";
+import { Inventory, Weapon } from "../models";
 import { Character } from "../models/character.model";
 
 const create = async(character: CharacterCreationAttributes) => {
@@ -16,10 +15,14 @@ const update = async (character: Character) => {
 
     return await existingCharacter.update(character)
 }
-const get = async (id: number) => {
+
+const findById = async (id: number) => {
     const character = await Character.findOne({
         where: { id },
-        include: Inventory
+        include: [{
+                model: Inventory,
+                include: [ Weapon ]
+            }]
     })
 
     if(!character){
@@ -29,15 +32,16 @@ const get = async (id: number) => {
     return character
 }
 
-const getAll = async () => {
+const findAll = async () => {
     return await Character.findAll({include: Inventory})
 }
 
-const weapons: Controller<Character, CharacterCreationAttributes> = {
+
+const characters: CharacterController = {
     create,
     update,
-    get,
-    getAll
+    findById,
+    findAll
 }
 
-export default weapons
+export { characters }

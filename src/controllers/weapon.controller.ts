@@ -1,5 +1,4 @@
-import { Controller } from "../@types/controller.types";
-import { WeaponAttributes, WeaponCreationAttributes } from "../@types/weapon.types";
+import { WeaponAttributes, WeaponController, WeaponCreationAttributes } from "../@types/weapon.types";
 import { Weapon } from "../models";
 
 const create = async (weapon: WeaponCreationAttributes): Promise<Weapon> => {
@@ -16,7 +15,7 @@ const update = async (weapon: Weapon) => {
     return await existingWeapon.update(weapon)
 }
 
-const get = async (id: number) => {
+const findById = async (id: number) => {
     const weapon = await Weapon.findOne({
         where: { id }
     })
@@ -28,15 +27,28 @@ const get = async (id: number) => {
     return weapon
 }
 
-const getAll = async (): Promise<Weapon[]> => {
+const findAll = async (): Promise<Weapon[]> => {
     return await Weapon.findAll()
 }
+
+const addToInventory = async (id: number, inventoryId: number) => {
+    const existingWeapon = await Weapon.findOne({where: { id }})
+    
+    if(!existingWeapon){
+        throw new Error(`Weapon id ${id} not found!`)
+    }
+
+    existingWeapon.inventoryId = inventoryId
+
+    return await existingWeapon.update(existingWeapon)    
+}
  
-const weapons: Controller<Weapon, WeaponCreationAttributes> = {
+const weapons: WeaponController = {
     create,
     update,
-    get,
-    getAll
+    findById,
+    findAll,
+    addToInventory
 }
 
-export default weapons
+export { weapons }

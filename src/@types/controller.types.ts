@@ -1,6 +1,6 @@
-export interface Controller<T, I> {
-    create: (input: I) => Promise<T>,
-    update: (input: T) => Promise<T>,
-    get: (id: number) => Promise<T>,
-    getAll: () => Promise<T[]>
+export interface Controller<T, C> {
+    create: (resource: C) => Promise<T>,
+    update: (resource: T) => Promise<T>,
+    findById: (id: number) => Promise<T>,
+    findAll: () => Promise<T[]>
 }

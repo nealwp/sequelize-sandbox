@@ -5,14 +5,14 @@ import { WeaponCreationAttributes } from "../@types/weapon.types";
 const router = Router()
 
 router.get('/', async (req, res, next) => {
-    const allWeapons = await weapons.getAll()
+    const allWeapons = await weapons.findAll()
     res.status(200).json(allWeapons)
 })
 
 router.get('/:id', async (req, res, next) => {
     const { id } = req.params
     try {
-        const weapon = await weapons.get(+id)
+        const weapon = await weapons.findById(+id)
         res.status(200).json(weapon)
     } catch (error) {
         console.error(error)
@@ -30,6 +30,16 @@ router.post('/', async (req, res, next) => {
         res.status(500).send()
     }
     
+})
+
+router.post('/inventory', async (req, res, next) => {
+    const { id, inventoryId } = req.body as {id: number, inventoryId: number}
+    try {
+        const updatedWeapon = await weapons.addToInventory(id, inventoryId)
+    } catch (error){
+        console.error(error)
+        res.status(500).send()
+    }
 })
 
 export default router

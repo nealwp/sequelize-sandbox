@@ -1,9 +1,3 @@
-import characters from './character.controller'
-import weapons from './weapon.controller'
-import inventories from './inventory.controller'
-
-export {
-    inventories,
-    characters, 
-    weapons
-}
+export * from './character.controller'
+export * from './weapon.controller'
+export * from './inventory.controller'

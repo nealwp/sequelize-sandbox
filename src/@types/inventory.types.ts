@@ -1,4 +1,6 @@
 import { Optional } from 'sequelize';
+import { Inventory } from '../models';
+import { Controller } from './controller.types';
 
 interface InventoryAttributes {
     id: number,
@@ -7,4 +9,6 @@ interface InventoryAttributes {
 
 interface InventoryCreationAttributes extends Optional<InventoryAttributes, 'id'> {}
 
-export {InventoryAttributes, InventoryCreationAttributes}
+interface InventoryController extends Controller<Inventory, InventoryCreationAttributes> {}
+
+export {InventoryAttributes, InventoryCreationAttributes, InventoryController }

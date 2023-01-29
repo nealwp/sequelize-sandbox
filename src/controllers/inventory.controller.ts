@@ -1,8 +1,7 @@
-import { Controller } from "../@types/controller.types";
-import { InventoryCreationAttributes } from "../@types/inventory.types";
+import { InventoryController, InventoryCreationAttributes } from "../@types/inventory.types";
 import { Inventory, Weapon } from "../models";
 
-const getAll = async () => {
+const findAll = async () => {
     return Inventory.findAll({include: Weapon})
 }
 
@@ -10,7 +9,7 @@ const create = async (inventory: InventoryCreationAttributes) => {
     return Inventory.create(inventory)
 }
 
-const get = async (id: number) => {
+const findById = async (id: number) => {
     const inventory = await Inventory.findOne({
         where: { id }
     })
@@ -31,11 +30,11 @@ const update = async (inventory: Inventory) => {
     return await existingInventory.update(inventory)
 }
 
-const inventories: Controller<Inventory, InventoryCreationAttributes> = {
-    getAll,
+const inventory: InventoryController = {
+    findAll,
     update,
     create,
-    get
+    findById
 }
 
-export default inventories
+export { inventory }

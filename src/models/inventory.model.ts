@@ -19,5 +19,5 @@ export class Inventory extends Model<InventoryAttributes, InventoryCreationAttri
     character!: Character
 
     @HasMany(() => Weapon)
-    waepons!: Weapon[] 
+    weapons!: Weapon[] 
 }

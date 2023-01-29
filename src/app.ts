@@ -1,8 +1,7 @@
 import * as db from './db'
-import * as controller from './controllers'
+import { characters, weapons, inventory } from './controllers'
 import { CharacterCreationAttributes } from './@types/character.types'
 import { MELEE, WeaponCreationAttributes } from './@types/weapon.types'
-import { InventoryCreationAttributes } from './@types/inventory.types'
 import server from './server'
 
 const newCharacter: CharacterCreationAttributes = {
@@ -17,13 +16,13 @@ const newWeapon: WeaponCreationAttributes = {
 }
 
 const loadData = async () => {
-    const luke = await controller.characters.create(newCharacter)
-    const lightsaber = await controller.weapons.create(newWeapon)
-    const lukeInventory = await controller.inventories.create({characterId: luke.id})
+    const luke = await characters.create(newCharacter)
+    const lightsaber = await weapons.create(newWeapon)
+    const lukeInventory = await inventory.create({characterId: luke.id})
     lightsaber.inventoryId = lukeInventory.id
-    await controller.weapons.update(lightsaber)
+    await weapons.update(lightsaber)
 
-    const results = await controller.characters.getAll()
+    const results = await characters.findAll()
     results.forEach(result => {
         const name = result.name
         const id = result.id
