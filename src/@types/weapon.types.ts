@@ -7,11 +7,12 @@ type WeaponType = typeof RANGED | typeof MELEE
 
 interface WeaponAttributes {
     id: number,
+    inventoryId: number,
     name: string,
     damage: number,
     type: WeaponType
 }
 
-interface WeaponCreationAttributes extends Optional<WeaponAttributes, 'id'> {}
+interface WeaponCreationAttributes extends Optional<WeaponAttributes, 'id' | 'inventoryId'> {}
 
 export { RANGED, MELEE, WeaponType, WeaponAttributes, WeaponCreationAttributes }
