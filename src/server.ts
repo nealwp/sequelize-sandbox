@@ -1,5 +1,5 @@
 import express from 'express'
-import bodyParser, { json } from 'body-parser'
+import bodyParser from 'body-parser'
 import router from './routes'
 
 const server = express()
