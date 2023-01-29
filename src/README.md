@@ -59,7 +59,7 @@ import { Inventory, Weapon, Character } from "../models";
 
 With index files, the `import * as <name>` syntax can also be used:
 
-Before, importing from specific file:
+Before, importing from specific files:
 
 ```typescript
 import { inventory } from "../controllers/inventory.controller"
