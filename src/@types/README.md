@@ -20,9 +20,6 @@ interface ExampleCreationAttributes extends Optional<ExampleAttributes, 'id'> {}
 
 /* Controller Interface */
 interface ExampleController extends Controller<Example, ExampleCreationAttributes> {}
-
-
-export { ExampleAttributes, ExampleCreationAttributes, ExampleController }
 ```
 
 ## Attributes
@@ -33,7 +30,7 @@ This interface should also match the Sequelize model in `example.model.ts`, minu
 
 ```typescript
 interface ExampleAttributes {
-    id: number,     // generally, all models will have an id
+    id: number,         // generally, all models will have an id
     name: string,
     friends: Friend[]   // you can also include other model types  
     ...    
