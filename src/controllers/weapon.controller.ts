@@ -38,9 +38,7 @@ const addToInventory = async (id: number, inventoryId: number) => {
         throw new Error(`Weapon id ${id} not found!`)
     }
 
-    existingWeapon.inventoryId = inventoryId
-
-    return await existingWeapon.update(existingWeapon)    
+    return await existingWeapon.update({inventoryId: inventoryId})    
 }
  
 const weapons: WeaponController = {

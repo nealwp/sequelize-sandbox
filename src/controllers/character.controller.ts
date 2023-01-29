@@ -33,9 +33,13 @@ const findById = async (id: number) => {
 }
 
 const findAll = async () => {
-    return await Character.findAll({include: Inventory})
+    return await Character.findAll({
+        include: {
+            model: Inventory,
+            include: [ Weapon ]
+        }
+    })
 }
-
 
 const characters: CharacterController = {
     create,

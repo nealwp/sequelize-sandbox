@@ -11,7 +11,8 @@ const create = async (inventory: InventoryCreationAttributes) => {
 
 const findById = async (id: number) => {
     const inventory = await Inventory.findOne({
-        where: { id }
+        where: { id },
+        include: Weapon
     })
     if(!inventory){
         throw new Error(`Inventory id ${id} not found!`)

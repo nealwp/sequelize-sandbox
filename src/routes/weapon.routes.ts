@@ -36,6 +36,7 @@ router.post('/inventory', async (req, res, next) => {
     const { id, inventoryId } = req.body as {id: number, inventoryId: number}
     try {
         const updatedWeapon = await weapons.addToInventory(id, inventoryId)
+        res.status(200).json(updatedWeapon)
     } catch (error){
         console.error(error)
         res.status(500).send()
