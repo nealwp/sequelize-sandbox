@@ -1,0 +1,202 @@
+{
+	"info": {
+		"_postman_id": "9ee38d78-71ef-43d6-8a50-d91c2c7f3fd3",
+		"name": "sequelize-sandbox",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18071123"
+	},
+	"item": [
+		{
+			"name": "characters",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/characters",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"characters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "characters/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/characters/10",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"characters",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "characters",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Han Solo\",\n    \"age\": 34\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/characters",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"characters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "inventory",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/inventory",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"inventory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "inventory",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"characterId\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/inventory",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"inventory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "inventory/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/inventory/3",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"inventory",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "weapons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/weapons",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"weapons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "weapons",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"blaster\",\n    \"type\": \"ranged\",\n    \"damage\": 30\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/weapons",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"weapons"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "localhost",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
