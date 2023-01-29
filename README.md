@@ -6,7 +6,14 @@ The goal here is to provide simple examples for using Sequelize, as well as esta
 
 Following the setup will give you a running Express API with a persistent PostgreSQL database via Docker. From there, you can experiment with creating new models, controller methods, routes, etc. 
 
-Feel free to fork this repo as a starting point for a project of your own. 
+Feel free to fork this repo as a starting point for a project of your own.
+
+## Project Navigation
+- [**src**](./src)
+- [**Types**](./src/@types)
+- [**Controllers**](./src/controllers)
+- [**Models**](./src/models)
+- [**Routes**](./src/routes)
 
 ## Set up
 
@@ -43,7 +50,7 @@ Feel free to fork this repo as a starting point for a project of your own.
 
 ## Disclaimer
 
-The documentation in this repo is opinionated - you will see things like *never do X*, *always do Y*, and *there should be Z*.  I'm well aware that this is not the only way - or even the best way - to logically structure a Sequelize/Express project. However, it is **a way that works**, and works well enough to be justify being opinionated about it.
+The documentation in this repo is opinionated; you will see things like *never do X*, *always do Y*, and *there should be Z*.  I'm well aware that this is not the only way - or even the best way - to logically structure a Sequelize/Express project. However, it is **a way that works**, and works well enough to be justify being opinionated about it.
 
 These opinions may be interpreted as rules. If that's useful to you, follow them. Should you find yourself in a situation where breaking these "rules" makes more sense than following them - then do that instead. 
 

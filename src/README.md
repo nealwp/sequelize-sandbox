@@ -1,5 +1,5 @@
 # src
-
+The root folder for the project source code.
 ## Project Structure
 ```text
 ./src
@@ -29,9 +29,11 @@
 
 - **controllers** - Controllers are the behaviors behind each model. These export objects with methods that *do stuff* with the models. If you are calling Sequelize model methods like `findAll()`, `build()`, `destroy()`, then that code belongs in a controller. In other words: *don't put Sequelize model code in anything but a controller*. There should be one `*.controller.ts` file per model.
 
-- **models** - 
+- **models** - These form the core of a Sequelize project. They define your database schema and relationships. Every model should have one `*.types.ts` file, one `*.controller.ts` file, and one `*.routes.ts` file.
 
-- **routes** - 
+- **routes** - These define the URL routes for your Express application. Every model should have one corresponding `*.routes.ts` file.
+
+## Index Files
 
 Each directory has an `index.ts` that imports and exports everything in that folder. This pattern helps keep imports tidy.
 
@@ -53,9 +55,11 @@ import { InventoryAttributes, WeaponAttributes, CharacterAttributes } from "../@
 import { Inventory, Weapon, Character } from "../models";
 ```
 
-The `import * as <name>` syntax can also be used:
+## Import *
 
-before:
+With index files, the `import * as <name>` syntax can also be used:
+
+Before, importing from specific file:
 
 ```typescript
 import { inventory } from "../controllers/inventory.controller"
@@ -67,7 +71,7 @@ const allWeapons = await weapons.findAll()
 const allInventory = await inventory.findAll()
 ```
 
-after:
+After, with index.ts:
 
 ```typescript
 import * as controllers from "../controllers"
