@@ -10,6 +10,17 @@ const create = async (inventory: InventoryCreationAttributes) => {
     return Inventory.create(inventory)
 }
 
+const get = async (id: number) => {
+    const inventory = await Inventory.findOne({
+        where: { id }
+    })
+    if(!inventory){
+        throw new Error(`Inventory id ${id} not found!`)
+    }
+
+    return inventory
+}
+
 const update = async (inventory: Inventory) => {
     const existingInventory = await Inventory.findOne({where: {id: inventory.id}})
     
@@ -23,7 +34,8 @@ const update = async (inventory: Inventory) => {
 const inventories: Controller<Inventory, InventoryCreationAttributes> = {
     getAll,
     update,
-    create
+    create,
+    get
 }
 
 export default inventories

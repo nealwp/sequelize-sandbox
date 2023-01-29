@@ -3,6 +3,7 @@ import * as controller from './controllers'
 import { CharacterCreationAttributes } from './@types/character.types'
 import { MELEE, WeaponCreationAttributes } from './@types/weapon.types'
 import { InventoryCreationAttributes } from './@types/inventory.types'
+import server from './server'
 
 const newCharacter: CharacterCreationAttributes = {
     name: 'Luke Skywalker',
@@ -32,7 +33,10 @@ const loadData = async () => {
     })
 }
 
+const PORT = 3000
 
 db.initialize().then(async () => {
-    await loadData()
+    server.listen(PORT, () => {
+        console.log(`server listening on port ${PORT}`)
+    })
 })

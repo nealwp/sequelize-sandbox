@@ -3,7 +3,6 @@ import { Controller } from "../@types/controller.types";
 import { Inventory } from "../models";
 import { Character } from "../models/character.model";
 
-
 const create = async(character: CharacterCreationAttributes) => {
     return await Character.create(character)
 }
@@ -17,6 +16,18 @@ const update = async (character: Character) => {
 
     return await existingCharacter.update(character)
 }
+const get = async (id: number) => {
+    const character = await Character.findOne({
+        where: { id },
+        include: Inventory
+    })
+
+    if(!character){
+        throw new Error(`Character id ${id} not found!`)
+    }
+
+    return character
+}
 
 const getAll = async () => {
     return await Character.findAll({include: Inventory})
@@ -25,6 +36,7 @@ const getAll = async () => {
 const weapons: Controller<Character, CharacterCreationAttributes> = {
     create,
     update,
+    get,
     getAll
 }
 

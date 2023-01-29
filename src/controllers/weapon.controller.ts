@@ -16,6 +16,18 @@ const update = async (weapon: Weapon) => {
     return await existingWeapon.update(weapon)
 }
 
+const get = async (id: number) => {
+    const weapon = await Weapon.findOne({
+        where: { id }
+    })
+
+    if(!weapon){
+        throw new Error(`Weapon id ${ id } not found!`)
+    }
+
+    return weapon
+}
+
 const getAll = async (): Promise<Weapon[]> => {
     return await Weapon.findAll()
 }
@@ -23,6 +35,7 @@ const getAll = async (): Promise<Weapon[]> => {
 const weapons: Controller<Weapon, WeaponCreationAttributes> = {
     create,
     update,
+    get,
     getAll
 }
 
