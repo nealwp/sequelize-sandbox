@@ -9,7 +9,6 @@ const config = {
   DB_NAME: 'scratch'
 }
 
-
 const dbConfig: SequelizeOptions = {
   dialect: 'postgres',
   host: config.DB_URL,
@@ -24,7 +23,7 @@ const dbConfig: SequelizeOptions = {
 
 const sequelize = new Sequelize(dbConfig);
 
-async function initialize() {
+const initialize = async () => {
   try {
     await sequelize.authenticate();
     await sequelize.sync({ alter: true });
