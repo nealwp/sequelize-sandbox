@@ -1,5 +1,6 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, AutoIncrement, HasMany } from 'sequelize-typescript';
 import { CharacterAttributes, CharacterCreationAttributes } from '../@types/character.types';
+import { Inventory } from './inventory.model';
 
 @Table({tableName: 'characters'})
 export class Character extends Model<CharacterAttributes, CharacterCreationAttributes> {
@@ -14,4 +15,7 @@ export class Character extends Model<CharacterAttributes, CharacterCreationAttri
 
     @Column
     age!: number
+
+    @HasMany(() => Inventory)
+    inventory!: Inventory[]
 }
