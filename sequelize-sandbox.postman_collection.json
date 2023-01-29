@@ -170,6 +170,33 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "weapons/inventory",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"inventoryId\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/weapons/inventory",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"weapons",
+						"inventory"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
