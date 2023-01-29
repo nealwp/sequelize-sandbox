@@ -17,11 +17,6 @@ const dbConfig: SequelizeOptions = {
   password: config.DB_PASS,
   port: config.DB_PORT,
   database: config.DB_NAME,
-  pool: {
-    max: 5,
-    idle: 30000,
-    acquire: 60000,
-  },
   logging: false,
   models: Object.values(models),
 
