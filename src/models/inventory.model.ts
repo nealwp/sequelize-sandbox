@@ -4,7 +4,7 @@ import { Character } from './character.model';
 import { Weapon } from './weapon.model';
 
 @Table({tableName: 'inventory'})
-export class Inventory extends Model<InventoryAttributes, InventoryCreationAttributes> {
+class Inventory extends Model<InventoryAttributes, InventoryCreationAttributes> implements InventoryAttributes {
     
     @PrimaryKey
     @AutoIncrement
@@ -19,5 +19,7 @@ export class Inventory extends Model<InventoryAttributes, InventoryCreationAttri
     character!: Character
 
     @HasMany(() => Weapon)
-    weapons!: Weapon[] 
+    weapons!: Weapon[]
 }
+
+export { Inventory }

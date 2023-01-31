@@ -3,7 +3,7 @@ import { WeaponAttributes, WeaponCreationAttributes, WeaponType } from '../@type
 import { Inventory } from './inventory.model';
 
 @Table({tableName: 'weapons'})
-export class Weapon extends Model<WeaponAttributes, WeaponCreationAttributes> {
+class Weapon extends Model<WeaponAttributes, WeaponCreationAttributes> implements WeaponAttributes{
     
     @PrimaryKey
     @AutoIncrement
@@ -26,3 +26,5 @@ export class Weapon extends Model<WeaponAttributes, WeaponCreationAttributes> {
     @Column
     type!: WeaponType
 }
+
+export { Weapon }

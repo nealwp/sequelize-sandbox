@@ -3,7 +3,7 @@ import { CharacterAttributes, CharacterCreationAttributes } from '../@types/char
 import { Inventory } from './inventory.model';
 
 @Table({tableName: 'characters'})
-export class Character extends Model<CharacterAttributes, CharacterCreationAttributes> {
+class Character extends Model<CharacterAttributes, CharacterCreationAttributes> implements CharacterAttributes{
     
     @PrimaryKey
     @AutoIncrement
@@ -19,3 +19,5 @@ export class Character extends Model<CharacterAttributes, CharacterCreationAttri
     @HasMany(() => Inventory)
     inventory!: Inventory[]
 }
+
+export { Character }
