@@ -41,7 +41,7 @@ Now, what's happening here? We have a Character model. If you have a thing for c
 
 ## @Table, @Column, @etc
 
-Note that these decorators don't come from Sequelize, but rather from  `sequelize-typescript` - seperate npm package. You don't *have* to define your model with decorators, but just do it anyway. It makes a much cleaner model file versus using `Sequelize.define()`. 
+Note that these decorators don't come from Sequelize, but rather from  `sequelize-typescript` - a separate npm package. You don't *have* to define your model with decorators, but just do it anyway. It makes a much cleaner model file versus using `Sequelize.define()`. 
 
 Even though it's optional, always give your table a name. If you don't, someone else will, and some ~~people~~ libraries can have really kooky ideas about how to name a table.    
 ```typescript
