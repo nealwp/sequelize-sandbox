@@ -1,7 +1,9 @@
 import * as db from './db'
-import server from './server'
+import router from './routes'
+import { createServer } from './server'
 
 const PORT = 3000
+const server = createServer(router)
 
 db.initialize().then(async () => {
     server.listen(PORT, () => {
