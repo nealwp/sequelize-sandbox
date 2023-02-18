@@ -8,7 +8,7 @@ import { CharacterCreationAttributes } from '../../src/@types/character.types'
 let server: Express;
 
 beforeAll(() => {
-    server = createServer(characterRouter)
+    server = createServer(router)
 })
 
 describe('character routes', () => {
