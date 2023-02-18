@@ -81,4 +81,38 @@ describe('weapon routes', () => {
                 })
         })
     })
+
+    describe('POST /inventory', () => {
+        test('should return 200 and updated weapon', async () => {
+            
+            const weaponAndInventory = { id: 0, inventoryId: 1234 }
+
+            weapons.addToInventory = jest.fn().mockResolvedValue(weaponAndInventory)            
+
+            await supertest(server)
+                .post(`/inventory`)
+                .send(weaponAndInventory)
+                .expect(200)
+                .then(res => {
+                    expect(res.body).toEqual(weaponAndInventory)
+                })
+        })
+
+        test('should return 500 if request errors', async () => {
+            
+            const weaponAndInventory = { id: 0, inventoryId: 1234 }
+
+            weapons.addToInventory = jest.fn().mockRejectedValue({})
+            
+            const expectedError = `error adding weapon ${weaponAndInventory.id} to inventory ${weaponAndInventory.inventoryId}`
+
+            await supertest(server)
+                .post(`/inventory`)
+                .send(weaponAndInventory)
+                .expect(500)
+                .then(res => {
+                    expect((res.error as any).text).toEqual(expectedError)
+                })
+        })
+    })
 })

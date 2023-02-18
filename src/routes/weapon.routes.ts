@@ -41,7 +41,7 @@ router.post('/inventory', async (req, res, next) => {
         res.status(200).json(updatedWeapon)
     } catch (error){
         console.error(error)
-        res.status(500).send()
+        res.status(500).send(`error adding weapon ${id} to inventory ${inventoryId}`)
     }
 })
 
