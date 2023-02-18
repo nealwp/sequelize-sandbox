@@ -2,26 +2,30 @@
 The root folder for the project source code.
 ## Project Structure
 ```text
-./src
-├── @types
-│   ├── example.types.ts
-│   └── index.ts
-│
-├── controllers
-│   ├── example.controller.ts
-│   └── index.ts
-│
-├── models
-│   ├── example.model.ts
-│   └── index.ts
-│
-├── routes
-│   ├── example.routes.ts
-│   └── index.ts
-│
-├── app.ts
-├── db.ts
-└── server.ts
+── src
+    ├── @types
+    │   ├── example.types.ts
+    │   ├── index.ts
+    │   └── ...
+    │
+    ├── controllers
+    │   ├── example.controller.ts
+    │   ├── index.ts
+    │   └── ...
+    │
+    ├── models
+    │   ├── example.model.ts
+    │   ├── index.ts
+    │   └── ...
+    │
+    ├── routes
+    │   ├── example.routes.ts
+    │   ├── index.ts
+    │   └── ...
+    │
+    ├── app.ts
+    ├── db.ts
+    └── server.ts
 ```
 
 ## Folders
