@@ -6,7 +6,10 @@ const router = Router()
 
 router.get('/', async (req, res, next) => {
     const allWeapons = await weapons.findAll()
-    res.status(200).json(allWeapons)
+    if(!allWeapons.length){
+        return res.status(204).send()
+    }
+    return res.status(200).json(allWeapons)
 })
 
 router.get('/:id', async (req, res, next) => {
@@ -16,7 +19,7 @@ router.get('/:id', async (req, res, next) => {
         res.status(200).json(weapon)
     } catch (error) {
         console.error(error)
-        res.status(404).send()
+        res.status(404).send(`weapon with id ${id} not found`)
     }
 })
 
@@ -27,9 +30,8 @@ router.post('/', async (req, res, next) => {
         res.status(201).json(createdWeapon)
     } catch(error) {
         console.error(error)
-        res.status(500).send()
-    }
-    
+        res.status(500).send(`error creating weapon ${JSON.stringify(weapon)}`)
+    }  
 })
 
 router.post('/inventory', async (req, res, next) => {
@@ -39,7 +41,7 @@ router.post('/inventory', async (req, res, next) => {
         res.status(200).json(updatedWeapon)
     } catch (error){
         console.error(error)
-        res.status(500).send()
+        res.status(500).send(`error adding weapon ${id} to inventory ${inventoryId}`)
     }
 })
 

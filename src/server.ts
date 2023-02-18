@@ -1,11 +1,14 @@
-import express from 'express'
+import express, { Router } from 'express'
 import bodyParser from 'body-parser'
-import router from './routes'
 
-const server = express()
+const createServer = (router: Router) => {
+    const server = express()
 
-server.use(bodyParser.json())
-server.use(bodyParser.urlencoded({extended: true}))
-server.use(router)
+    server.use(bodyParser.json())
+    server.use(bodyParser.urlencoded({extended: true}))
+    server.use(router)
 
-export default server
+    return server
+}
+
+export { createServer }
