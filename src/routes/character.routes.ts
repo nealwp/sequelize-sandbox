@@ -16,7 +16,7 @@ router.get('/:id', async (req, res, next) => {
         res.status(200).json(character)
     } catch (error) {
         console.error(error)
-        res.status(404).send()
+        res.status(404).send(`character with id ${id} not found`)
     }
 })
 
