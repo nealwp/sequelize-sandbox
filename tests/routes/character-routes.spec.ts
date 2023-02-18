@@ -3,7 +3,7 @@ import characterRouter from '../../src/routes/character.routes'
 import { Express } from 'express-serve-static-core'
 import { createServer } from '../../src/server'
 import { characters } from '../../src/controllers'
-import { CharacterAttributes } from '../../src/@types/character.types'
+import { CharacterAttributes, CharacterCreationAttributes } from '../../src/@types/character.types'
 import { Character } from '../../src/models'
 
 const characterRecords: CharacterAttributes[] = [
@@ -22,6 +22,13 @@ characters.findById = jest.fn(async (id: number) => {
         throw new Error('not found')
     }
 })
+characters.create = jest.fn(async (character: CharacterCreationAttributes) => {
+    const createdCharacter = {
+        id: 0, 
+        ...character
+    }
+    return createdCharacter as Character
+})
 
 let server: Express;
 
@@ -30,6 +37,7 @@ beforeAll(() => {
 })
 
 describe('character routes', () => {
+    
     describe('GET /', () => {
         test('should return 200 and all characters', async () => {
             await supertest(server)
@@ -40,8 +48,8 @@ describe('character routes', () => {
                 })
         })
     })
-    describe('GET /:id', () => {
-        
+    
+    describe('GET /:id', () => {    
         test('should return 200 and character matching id', async () => {
             const characterId = 1
             await supertest(server)
@@ -60,6 +68,29 @@ describe('character routes', () => {
                 .expect(404)
                 .then(res => {
                     expect((res.error as any).text).toEqual(expectedError)
+                })
+        })
+    })
+
+    describe('POST /', () => {
+        test('should return 201 and created character', async () => {
+            const newCharacter: CharacterCreationAttributes = {
+                name: 'name',
+                age: 20
+            }
+
+            const expectedResponse = {
+                id:  0,
+                name: 'name',
+                age: 20
+            }
+
+            await supertest(server)
+                .post(`/`)
+                .send(newCharacter)
+                .expect(201)
+                .then(res => {
+                    expect(res.body).toEqual(expectedResponse)
                 })
         })
     })
