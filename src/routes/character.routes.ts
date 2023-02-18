@@ -20,7 +20,7 @@ router.get('/:id', async (req, res, next) => {
         const character = await characters.findById(+id)
         res.status(200).json(character)
     } catch (error) {
-        console.error((error as any).message)
+        console.error(error)
         res.status(404).send(`character with id ${id} not found`)
     }
 })

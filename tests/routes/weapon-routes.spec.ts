@@ -49,7 +49,7 @@ describe('weapon routes', () => {
 
         test('should return 404 if weapon is not found', async () => {
             const weaponId = 5
-            weapons.findById = jest.fn().mockRejectedValue({})
+            weapons.findById = jest.fn().mockRejectedValue('that didnt work')
             const expectedError = `weapon with id ${weaponId} not found`
             
             await supertest(server)
@@ -89,7 +89,7 @@ describe('weapon routes', () => {
                 type: 'melee'
             }
 
-            weapons.create = jest.fn().mockRejectedValue({})
+            weapons.create = jest.fn().mockRejectedValue('that didnt work')
             
             const expectedError = `error creating weapon ${JSON.stringify(newWeapon)}`
 
@@ -123,7 +123,7 @@ describe('weapon routes', () => {
             
             const weaponAndInventory = { id: 0, inventoryId: 1234 }
 
-            weapons.addToInventory = jest.fn().mockRejectedValue({})
+            weapons.addToInventory = jest.fn().mockRejectedValue('that didnt work')
             
             const expectedError = `error adding weapon ${weaponAndInventory.id} to inventory ${weaponAndInventory.inventoryId}`
 

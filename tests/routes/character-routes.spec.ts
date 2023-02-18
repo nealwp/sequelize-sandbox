@@ -50,7 +50,7 @@ describe('character routes', () => {
 
         test('should return 404 if character is not found', async () => {
             const characterId = 5
-            characters.findById = jest.fn().mockRejectedValue({})
+            characters.findById = jest.fn().mockRejectedValue('that didnt work')
             const expectedError = `character with id ${characterId} not found`
             
             await supertest(server)
