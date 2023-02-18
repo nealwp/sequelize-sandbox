@@ -19,7 +19,7 @@ router.get('/:id', async (req, res, next) => {
         res.status(200).json(weapon)
     } catch (error) {
         console.error(error)
-        res.status(404).send()
+        res.status(404).send(`weapon with id ${id} not found`)
     }
 })
 

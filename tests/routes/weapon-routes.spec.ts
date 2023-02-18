@@ -32,4 +32,32 @@ describe('weapon routes', () => {
                 .expect(204)
         })
     })
+
+    describe('GET /:id', () => {    
+        test('should return 200 and weapon matching id', async () => {
+            
+            const weaponId = 1234
+            weapons.findById = jest.fn().mockResolvedValue({id: weaponId})
+            
+            await supertest(server)
+                .get(`/${weaponId}`)
+                .expect(200)
+                .then(res => {
+                    expect(res.body).toMatchObject({id: weaponId})
+                })
+        })
+
+        test('should return 404 if weapon is not found', async () => {
+            const weaponId = 5
+            weapons.findById = jest.fn().mockRejectedValue({})
+            const expectedError = `weapon with id ${weaponId} not found`
+            
+            await supertest(server)
+                .get(`/${weaponId}`)
+                .expect(404)
+                .then(res => {
+                    expect((res.error as any).text).toEqual(expectedError)
+                })
+        })
+    })
 })
