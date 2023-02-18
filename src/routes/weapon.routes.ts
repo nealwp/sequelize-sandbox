@@ -31,8 +31,7 @@ router.post('/', async (req, res, next) => {
     } catch(error) {
         console.error(error)
         res.status(500).send()
-    }
-    
+    }  
 })
 
 router.post('/inventory', async (req, res, next) => {

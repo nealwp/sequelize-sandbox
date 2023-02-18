@@ -60,4 +60,25 @@ describe('weapon routes', () => {
                 })
         })
     })
+
+    describe('POST /', () => {
+        test('should return 201 and created weapon', async () => {
+            
+            const newWeapon: WeaponCreationAttributes = {
+                name: 'name',
+                damage: 100,
+                type: 'melee'
+            }
+
+            weapons.create = jest.fn().mockResolvedValue({id: 0, ...newWeapon})            
+
+            await supertest(server)
+                .post(`/`)
+                .send(newWeapon)
+                .expect(201)
+                .then(res => {
+                    expect(res.body).toEqual({id: 0, ...newWeapon})
+                })
+        })
+    })
 })
