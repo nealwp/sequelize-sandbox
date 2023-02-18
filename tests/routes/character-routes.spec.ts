@@ -21,7 +21,6 @@ characters.findById = jest.fn(async (id: number) => {
     } else {
         throw new Error('not found')
     }
-
 })
 
 let server: Express;
