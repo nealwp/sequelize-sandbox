@@ -80,6 +80,27 @@ describe('weapon routes', () => {
                     expect(res.body).toEqual({id: 0, ...newWeapon})
                 })
         })
+
+        test('should return 500 if request errors', async () => {
+            
+            const newWeapon: WeaponCreationAttributes = {
+                name: 'name',
+                damage: 100,
+                type: 'melee'
+            }
+
+            weapons.create = jest.fn().mockRejectedValue({})
+            
+            const expectedError = `error creating weapon ${JSON.stringify(newWeapon)}`
+
+            await supertest(server)
+                .post(`/`)
+                .send(newWeapon)
+                .expect(500)
+                .then(res => {
+                    expect((res.error as any).text).toEqual(expectedError)
+                })
+        })
     })
 
     describe('POST /inventory', () => {

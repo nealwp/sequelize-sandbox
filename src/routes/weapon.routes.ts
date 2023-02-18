@@ -30,7 +30,7 @@ router.post('/', async (req, res, next) => {
         res.status(201).json(createdWeapon)
     } catch(error) {
         console.error(error)
-        res.status(500).send()
+        res.status(500).send(`error creating weapon ${JSON.stringify(weapon)}`)
     }  
 })
 
