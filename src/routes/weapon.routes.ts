@@ -6,7 +6,10 @@ const router = Router()
 
 router.get('/', async (req, res, next) => {
     const allWeapons = await weapons.findAll()
-    res.status(200).json(allWeapons)
+    if(!allWeapons.length){
+        return res.status(204).send()
+    }
+    return res.status(200).json(allWeapons)
 })
 
 router.get('/:id', async (req, res, next) => {
