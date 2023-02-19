@@ -39,7 +39,25 @@ describe('character controller', () => {
     })
 
     describe('findById', () => {
+        test('should throw an error if character does not exist', async () => {
+            const characterId = 9999
 
+            Character.findOne = jest.fn().mockResolvedValue(null)
+
+            await expect(
+                async () => await characters.findById(characterId)
+            ).rejects.toThrow(`Character id ${characterId} not found!`)
+        })
+
+        test('should return a character if found', async () => {
+            const characterId = 0
+
+            Character.findOne = jest.fn().mockResolvedValue({id: characterId})
+
+            const result = await characters.findById(characterId)
+
+            expect(result).toEqual({id: characterId})
+        })
     })
 
     describe('findAll', () => {
