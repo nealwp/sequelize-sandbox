@@ -61,6 +61,12 @@ describe('character controller', () => {
     })
 
     describe('findAll', () => {
+        test('should return an array of characters', async () => {
+            characters.findAll = jest.fn().mockResolvedValue(['found some characters'])
 
+            const result = await characters.findAll()
+
+            expect(result.length).toBeGreaterThan(0)
+        })
     })
 })
