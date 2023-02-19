@@ -18,7 +18,15 @@ describe('character controller', () => {
     })
 
     describe('update', () => {
+        test('should throw an error if character does not exist', async () => {
+            const character = <Character>{id: 9999}
 
+            Character.findOne = jest.fn().mockResolvedValue(null)
+
+            await expect(
+                async () => await characters.update(character)
+            ).rejects.toThrow(`Character id ${character.id} not found!`)
+        })
     })
 
     describe('findById', () => {
