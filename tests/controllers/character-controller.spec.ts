@@ -27,6 +27,15 @@ describe('character controller', () => {
                 async () => await characters.update(character)
             ).rejects.toThrow(`Character id ${character.id} not found!`)
         })
+
+        test('should return updated character if update is successful', async () => {
+            const updatedCharacter = <Character>{id: 0, name: 'name', age: 22}
+
+            Character.findOne = jest.fn().mockResolvedValue({update: () => updatedCharacter})
+            
+            const result = await characters.update(updatedCharacter)
+            expect(result).toEqual(updatedCharacter)
+        })
     })
 
     describe('findById', () => {
