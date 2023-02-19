@@ -75,4 +75,30 @@ describe('weapons controller', () => {
             expect(result.length).toBeGreaterThan(0)
         })
     })
+
+    describe('addToInventory', () => {
+        test('should throw an error if weapon is not found', async () => {
+            
+            const weaponId = 9999
+            const inventoryId = 0
+            
+            Weapon.findOne = jest.fn().mockResolvedValue(null)
+            
+            await expect(
+                async () => await weapons.addToInventory(weaponId, inventoryId)
+            ).rejects.toThrow(`Weapon id ${weaponId} not found!`)
+        })
+
+        test('should return weapon with added inventory id', async () => {
+            const weaponId = 0
+            const inventoryId = 0
+
+            Weapon.findOne = jest.fn().mockResolvedValue({
+                update: () => <Weapon>{ id: weaponId, inventoryId }
+            })
+
+            const result = await weapons.addToInventory(weaponId, inventoryId)
+            expect(result).toEqual({id: weaponId, inventoryId})
+        })
+    })
 })
