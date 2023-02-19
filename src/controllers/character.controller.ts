@@ -33,12 +33,14 @@ const findById = async (id: number) => {
 }
 
 const findAll = async () => {
-    return await Character.findAll({
+    const allCharacters = await Character.findAll({
         include: {
             model: Inventory,
             include: [ Weapon ]
         }
     })
+
+    return allCharacters
 }
 
 const characters: CharacterController = {
