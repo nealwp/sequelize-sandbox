@@ -8,11 +8,20 @@ import { faker } from '@faker-js/faker'
 describe('character controller', () => {
     beforeAll(async () => {
         await db.initialize()
+        await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+    })
+
+    afterAll(async () => {
+        await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
     })
     
     describe('create', () => {
         
         beforeEach(async () => {
+            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        })
+
+        afterEach(async () => {
             await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
         })
 
@@ -43,6 +52,10 @@ describe('character controller', () => {
             await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
         })
 
+        afterEach(async () => {
+            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        })
+    
         test('should update an existing character', async () => {
             
             const character: Partial<Character> = {
@@ -84,6 +97,10 @@ describe('character controller', () => {
             await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
         })
 
+        afterEach(async () => {
+            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        })
+
         test('should find an existing character for a matching id', async () => {
             
             const characterId = faker.datatype.number({precision: 1})
@@ -117,6 +134,10 @@ describe('character controller', () => {
     describe('findAll', () => {
         
         beforeEach(async () => {
+            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        })
+
+        afterEach(async () => {
             await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
         })
 
