@@ -19,7 +19,7 @@ interface ExampleAttributes {
 interface ExampleCreationAttributes extends Optional<ExampleAttributes, 'id'> {}
 
 /* Controller Interface */
-interface ExampleController extends Controller<Example, ExampleCreationAttributes> {}
+interface ExampleController extends Controller<Example, ExampleAttributes, ExampleCreationAttributes> {}
 ```
 
 ## Attributes
@@ -58,7 +58,7 @@ interface ExampleCreationAttributes extends Optional<ExampleAttributes, 'id' | '
 We expect a 1:1:1 relationship between Type:Model:Controller, therefore we can go ahead and create a controller interface for this model.
 
 ```typescript
-interface ExampleController extends Controller<Example, ExampleCreationAttributes> {}
+interface ExampleController extends Controller<Example, ExampleAttributes, ExampleCreationAttributes> {}
 ```
 
 The model controller extends the generic controller interface, which defines the basic CRUD operations.
@@ -66,9 +66,9 @@ The model controller extends the generic controller interface, which defines the
 ```typescript
 // controller.types.ts
 
-interface Controller<T, C> {
+interface Controller<T, A, C> {
     create: (resource: C) => Promise<T>,
-    update: (resource: T) => Promise<T>,
+    update: (resource: A) => Promise<T>,
     findById: (id: number) => Promise<T>,
     findAll: () => Promise<T[]>
 }
@@ -77,7 +77,7 @@ interface Controller<T, C> {
 If you need additional methods for you model controller, simply add their function type expressions to the interface:
 
 ```typescript
-interface ExampleController extends Controller<Example, ExampleCreationAttributes> {
+interface ExampleController extends Controller<Example, ExampleAttributes ExampleCreationAttributes> {
     findExampleByName: (name: string) => Promise<Example>
 }
 ```
