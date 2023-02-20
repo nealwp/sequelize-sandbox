@@ -36,19 +36,24 @@ describe('character controller', () => {
     })
 
     describe('update', () => {
+        
+        beforeEach(async () => {
+            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        })
+
         test('should update an existing character', async () => {
             
             const character: Partial<Character> = {
                 id: 1234,
                 name: 'character name',
                 age: 21,
-                createdAt: new Date(),
-                updatedAt: new Date()
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
             }
             
             const insertCharacter = `
-                insert into characters (id, name, age, createdAt, updatedAt)
-                values ('${character.id}, ${character.name}', ${character.age}, ${character.createdAt}, ${character.updatedAt}) 
+                insert into characters (id, name, age, "createdAt", "updatedAt")
+                values (${character.id}, '${character.name}', ${character.age}, '${character.createdAt}', '${character.updatedAt}') 
             `
             await db.client.query(insertCharacter, {type: QueryTypes.INSERT})
 
@@ -59,7 +64,16 @@ describe('character controller', () => {
             }
 
             const result = await characters.update(updatedCharacter)
-            expect(result).toEqual('hey hey the working man')
+            expect(result).toMatchObject<Partial<Character>>({
+                id: character.id,
+                name: updatedCharacter.name,
+                age: updatedCharacter.age,
+                createdAt: new Date(character.createdAt),
+                updatedAt: expect.any(Date)
+            })
+
+            const [ dbContents ] = await db.client.query(`select * from characters where id = ${character.id}`, {type: QueryTypes.SELECT})
+            expect(dbContents).toEqual(result.toJSON())
         })
     })
 })
