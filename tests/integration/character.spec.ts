@@ -3,6 +3,7 @@ import { CharacterAttributes, CharacterCreationAttributes } from "../../src/@typ
 import { characters } from "../../src/controllers"
 import { Character } from '../../src/models'
 import { QueryTypes } from 'sequelize'
+import { faker } from '@faker-js/faker'
 
 describe('character controller', () => {
     beforeAll(async () => {
@@ -109,6 +110,38 @@ describe('character controller', () => {
                 createdAt: new Date(character.createdAt),
                 updatedAt: new Date(character.updatedAt)
             })
+        })
+    })
+
+    describe('findAll', () => {
+        
+        beforeEach(async () => {
+            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        })
+
+        test('should find all characters in the database', async () => {
+            
+            const characterRecords = Array.from({length: 10}, () => {
+                const character: Partial<Character> = {
+                    id: faker.datatype.number({precision: 1}),
+                    name: faker.name.fullName(),
+                    age: faker.datatype.number({min: 0, max: 100}),
+                    createdAt: faker.date.past().toISOString(),
+                    updatedAt: faker.date.past().toISOString()
+                }
+                return character
+            })
+            
+            for (const character of characterRecords) {
+                const insertCharacterSql = `
+                    insert into characters (id, name, age, "createdAt", "updatedAt")
+                    values (${character.id}, '${character.name}', ${character.age}, '${character.createdAt}', '${character.updatedAt}') 
+                `
+                await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
+            }
+
+            const result = await characters.findAll()
+            expect(result).toHaveLength(characterRecords.length)
         })
     })
 })
