@@ -18,15 +18,16 @@ describe('character controller', () => {
 
         test('should create a new character', async () => {
             const character: CharacterCreationAttributes = {
-                name: 'character name',
-                age: 21
+                name: faker.name.fullName(),
+                age: faker.datatype.number({min: 0, max: 100}),
             }
              
             const result = await characters.create(character)
+            
             expect(result).toMatchObject<Partial<Character>>({
                 id: expect.any(Number),
-                name: 'character name',
-                age: 21,
+                name: character.name,
+                age: character.age,
                 createdAt: expect.any(Date),
                 updatedAt: expect.any(Date)
             })
@@ -45,11 +46,11 @@ describe('character controller', () => {
         test('should update an existing character', async () => {
             
             const character: Partial<Character> = {
-                id: 1234,
-                name: 'character name',
-                age: 21,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
+                id: faker.datatype.number({precision: 1}),
+                name: faker.name.fullName(),
+                age: faker.datatype.number({min: 0, max: 100}),
+                createdAt: faker.date.past().toISOString(),
+                updatedAt: faker.date.past().toISOString(),
             }
             
             const insertCharacterSql = `
@@ -59,9 +60,9 @@ describe('character controller', () => {
             await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
 
             const updatedCharacter: CharacterAttributes = {
-                id: 1234,
-                name: 'character name updated',
-                age: 32,
+                id: character.id as number,
+                name:  faker.name.fullName(),
+                age: faker.datatype.number({min: 0, max: 100}),
             }
 
             const result = await characters.update(updatedCharacter)
@@ -85,14 +86,14 @@ describe('character controller', () => {
 
         test('should find an existing character for a matching id', async () => {
             
-            const characterId = 31415
+            const characterId = faker.datatype.number({precision: 1})
 
             const character: Partial<Character> = {
                 id: characterId,
-                name: 'findById character name',
-                age: 37,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
+                name: faker.name.fullName(),
+                age: faker.datatype.number({min: 0, max: 100}),
+                createdAt: faker.date.past().toISOString(),
+                updatedAt: faker.date.past().toISOString()
             }
             
             const insertCharacterSql = `
