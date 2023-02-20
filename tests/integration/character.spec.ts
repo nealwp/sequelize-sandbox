@@ -51,11 +51,11 @@ describe('character controller', () => {
                 updatedAt: new Date().toISOString()
             }
             
-            const insertCharacter = `
+            const insertCharacterSql = `
                 insert into characters (id, name, age, "createdAt", "updatedAt")
                 values (${character.id}, '${character.name}', ${character.age}, '${character.createdAt}', '${character.updatedAt}') 
             `
-            await db.client.query(insertCharacter, {type: QueryTypes.INSERT})
+            await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
 
             const updatedCharacter: CharacterAttributes = {
                 id: 1234,
@@ -74,6 +74,41 @@ describe('character controller', () => {
 
             const [ dbContents ] = await db.client.query(`select * from characters where id = ${character.id}`, {type: QueryTypes.SELECT})
             expect(dbContents).toEqual(result.toJSON())
+        })
+    })
+
+    describe('findById', () => {
+        beforeEach(async () => {
+            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        })
+
+        test('should find an existing character for a matching id', async () => {
+            
+            const characterId = 31415
+
+            const character: Partial<Character> = {
+                id: characterId,
+                name: 'findById character name',
+                age: 37,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            }
+            
+            const insertCharacterSql = `
+                insert into characters (id, name, age, "createdAt", "updatedAt")
+                values (${character.id}, '${character.name}', ${character.age}, '${character.createdAt}', '${character.updatedAt}') 
+            `
+            await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
+
+            const result = await characters.findById(characterId)
+            expect(result).toMatchObject<Partial<Character>>({
+                id: character.id,
+                name: character.name,
+                age: character.age,
+                inventory: expect.any(Array),
+                createdAt: new Date(character.createdAt),
+                updatedAt: new Date(character.updatedAt)
+            })
         })
     })
 })
