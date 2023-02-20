@@ -1,4 +1,4 @@
-import { CharacterController, CharacterCreationAttributes } from "../@types/character.types";
+import { CharacterAttributes, CharacterController, CharacterCreationAttributes } from "../@types/character.types";
 import { Inventory, Weapon } from "../models";
 import { Character } from "../models/character.model";
 
@@ -6,7 +6,7 @@ const create = async(character: CharacterCreationAttributes) => {
     return await Character.create(character)
 }
 
-const update = async (character: Character) => {
+const update = async (character: CharacterAttributes) => {
     const existingCharacter = await Character.findOne({where: {id: character.id}})
     
     if(!existingCharacter){

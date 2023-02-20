@@ -5,7 +5,7 @@ const create = async (weapon: WeaponCreationAttributes): Promise<Weapon> => {
     return await Weapon.create(weapon)
 }
 
-const update = async (weapon: Weapon) => {
+const update = async (weapon: WeaponAttributes) => {
     const existingWeapon = await Weapon.findOne({where: {id: weapon.id}})
     
     if(!existingWeapon){

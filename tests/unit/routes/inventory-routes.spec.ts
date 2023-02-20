@@ -1,9 +1,9 @@
 import supertest from 'supertest'
-import router from '../../src/routes/inventory.routes'
+import router from '../../../src/routes/inventory.routes'
 import { Express } from 'express-serve-static-core'
-import { createServer } from '../../src/server'
-import { inventory } from '../../src/controllers'
-import { InventoryCreationAttributes } from '../../src/@types/inventory.types'
+import { createServer } from '../../../src/server'
+import { inventory } from '../../../src/controllers'
+import { InventoryCreationAttributes } from '../../../src/@types/inventory.types'
 
 let server: Express;
 

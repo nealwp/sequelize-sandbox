@@ -10,6 +10,6 @@ interface CharacterAttributes {
 
 interface CharacterCreationAttributes extends Optional<CharacterAttributes, 'id'> {}
 
-interface CharacterController extends Controller<Character, CharacterCreationAttributes> {}
+interface CharacterController extends Controller<Character, CharacterAttributes, CharacterCreationAttributes> {}
 
 export {CharacterAttributes, CharacterCreationAttributes, CharacterController }
