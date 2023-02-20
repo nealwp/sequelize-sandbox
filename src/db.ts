@@ -34,4 +34,4 @@ const initialize = async () => {
   
 }
 
-export { initialize }
+export { initialize, sequelize as client }
