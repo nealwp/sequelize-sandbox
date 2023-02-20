@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest ./tests/unit",
     "dev": "nodemon src/app.ts",
     "db:start": "docker run --rm --name postgres_sequelize -p 5432:5432 -v sequelize-pgdata:/var/lib/postgresql/data -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=scratch -d postgres",
     "db:stop": "docker stop postgres_sequelize"

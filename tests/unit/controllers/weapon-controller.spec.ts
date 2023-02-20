@@ -1,6 +1,6 @@
-import { WeaponCreationAttributes } from "../../src/@types/weapon.types"
-import { weapons } from "../../src/controllers"
-import { Weapon } from "../../src/models"
+import { WeaponCreationAttributes } from "../../../src/@types/weapon.types"
+import { weapons } from "../../../src/controllers"
+import { Weapon } from "../../../src/models"
 
 describe('weapons controller', () => {
     describe('create', () => {

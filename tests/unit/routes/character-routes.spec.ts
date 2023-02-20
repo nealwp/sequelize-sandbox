@@ -1,9 +1,9 @@
 import supertest from 'supertest'
-import router from '../../src/routes/character.routes'
+import router from '../../../src/routes/character.routes'
 import { Express } from 'express-serve-static-core'
-import { createServer } from '../../src/server'
-import { characters } from '../../src/controllers'
-import { CharacterCreationAttributes } from '../../src/@types/character.types'
+import { createServer } from '../../../src/server'
+import { characters } from '../../../src/controllers'
+import { CharacterCreationAttributes } from '../../../src/@types/character.types'
 
 let server: Express;
 

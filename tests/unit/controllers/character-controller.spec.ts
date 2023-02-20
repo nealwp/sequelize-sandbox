@@ -1,6 +1,6 @@
-import { CharacterCreationAttributes } from "../../src/@types/character.types"
-import { characters } from "../../src/controllers"
-import { Character } from "../../src/models"
+import { CharacterCreationAttributes } from "../../../src/@types/character.types"
+import { characters } from "../../../src/controllers"
+import { Character } from "../../../src/models"
 
 describe('character controller', () => {
     describe('create', () => {

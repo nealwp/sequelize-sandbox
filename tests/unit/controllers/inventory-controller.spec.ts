@@ -1,6 +1,6 @@
-import { InventoryCreationAttributes } from "../../src/@types/inventory.types"
-import { inventory } from "../../src/controllers"
-import { Inventory } from "../../src/models"
+import { InventoryCreationAttributes } from "../../../src/@types/inventory.types"
+import { inventory } from "../../../src/controllers"
+import { Inventory } from "../../../src/models"
 
 describe('inventory controller', () => {
     describe('create', () => {

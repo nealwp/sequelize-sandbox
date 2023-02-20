@@ -1,9 +1,9 @@
 import supertest from 'supertest'
-import router from '../../src/routes/weapon.routes'
+import router from '../../../src/routes/weapon.routes'
 import { Express } from 'express-serve-static-core'
-import { createServer } from '../../src/server'
-import { weapons } from '../../src/controllers'
-import { WeaponCreationAttributes } from '../../src/@types/weapon.types'
+import { createServer } from '../../../src/server'
+import { weapons } from '../../../src/controllers'
+import { WeaponCreationAttributes } from '../../../src/@types/weapon.types'
 
 let server: Express;
 
