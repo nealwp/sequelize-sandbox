@@ -17,7 +17,7 @@ interface WeaponAttributes {
 
 interface WeaponCreationAttributes extends Optional<WeaponAttributes, 'id' | 'inventoryId'> {}
 
-interface WeaponController extends Controller<Weapon, WeaponCreationAttributes> {
+interface WeaponController extends Controller<Weapon, WeaponAttributes, WeaponCreationAttributes> {
     addToInventory: (id: number, inventoryId: number) => Promise<Weapon>
 }
 

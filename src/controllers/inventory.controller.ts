@@ -1,4 +1,4 @@
-import { InventoryController, InventoryCreationAttributes } from "../@types/inventory.types";
+import { InventoryAttributes, InventoryController, InventoryCreationAttributes } from "../@types/inventory.types";
 import { Inventory, Weapon } from "../models";
 
 const findAll = async () => {
@@ -21,7 +21,7 @@ const findById = async (id: number) => {
     return inventory
 }
 
-const update = async (inventory: Inventory) => {
+const update = async (inventory: InventoryAttributes) => {
     const existingInventory = await Inventory.findOne({where: {id: inventory.id}})
     
     if(!existingInventory){

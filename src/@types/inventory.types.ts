@@ -9,6 +9,6 @@ interface InventoryAttributes {
 
 interface InventoryCreationAttributes extends Optional<InventoryAttributes, 'id'> {}
 
-interface InventoryController extends Controller<Inventory, InventoryCreationAttributes> {}
+interface InventoryController extends Controller<Inventory, InventoryAttributes, InventoryCreationAttributes> {}
 
 export {InventoryAttributes, InventoryCreationAttributes, InventoryController }
