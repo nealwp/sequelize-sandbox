@@ -48,6 +48,45 @@ Feel free to fork this repo as a starting point for a project of your own.
     - Password: `postgres`
     - Database Name: `scratch`
 
+## Data Model
+
+The example code in this project is meant to represent a basic inventory system for a game. There are three models to depict this:
+1. Characters
+1. Inventory
+1. Weapons
+
+```mermaid
+erDiagram
+    CHARACTER ||--o| INVENTORY : ""
+    CHARACTER {
+        int id
+        string name
+        int age
+    }
+    INVENTORY ||--o{ WEAPON : ""
+    INVENTORY ||--o| CHARACTER : ""
+    INVENTORY {
+        int id
+        int characterId
+    }
+    WEAPON ||--o| INVENTORY : ""
+    WEAPON {
+        int id
+        int inventoryId
+        string name
+        int damage
+        string type
+    }
+
+```
+- A character can be assigned zero or exactly one inventory
+- An inventory can be assigned to zero or exactly one character
+- A weapon can belong to zero or exactly one inventory
+- An inventory can have zero to any number of weapons
+- Each entity can exist independently of all other entities
+
+The model is deliberately simple, as the goal here is to give concrete examples of "how to do X with Sequelize & TypeScript" in as little code as possible.
+
 ## Disclaimer
 
 The documentation in this repo is opinionated; you will see things like *never do X*, *always do Y*, and *there should be Z*.  I'm well aware that this is not the only way - or even the best way - to logically structure a Sequelize/Express project. However, **it is a way that works**, and works well enough to justify being opinionated about it.
