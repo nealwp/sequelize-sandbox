@@ -1,9 +1,7 @@
 name: Run Unit & Integration tests
 
 on:
-  push:
-    branches:
-      - '!main'
+  push
 
 jobs:
   unit:
