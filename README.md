@@ -55,3 +55,4 @@ The documentation in this repo is opinionated; you will see things like *never d
 These opinions may be interpreted as rules. If it proves useful for you to follow them - do so. Should you find yourself in a situation where breaking these "rules" makes more sense than following them - great! Do that instead. 
 
 I am confident in your ability to use your noggin.
+
