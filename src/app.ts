@@ -1,5 +1,5 @@
 import * as db from './db'
-import router from './routes'
+import router from './router'
 import { createServer } from './server'
 
 const PORT = 3000

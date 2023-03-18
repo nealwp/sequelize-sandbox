@@ -1,7 +1,6 @@
 import { ModelAttributeColumnOptions } from 'sequelize';
 import { Table, Column, Model, HasMany, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { Character as CharacterCreationAttributes} from '../@types/character.types';
-import { Follower } from './follower.model';
 import { Inventory } from './inventory.model';
 
 interface CharacterAttributes extends CharacterCreationAttributes {
@@ -68,8 +67,26 @@ class Character extends Model<CharacterAttributes, CharacterCreationAttributes> 
     @HasMany(() => Inventory)
     inventory!: Inventory[]
 
-    @HasMany(() => Follower)
-    followers!: Follower[]
+    // this is to handle the input/response payload
+    @Column({
+        field: 'character',
+        type: DataType.VIRTUAL,
+        get() {
+            const character = {
+                id: this.get('id'),
+                name: this.get('name'),
+                age: this.get('age'),
+                createdAt: this.get('createdAt'),
+                updatedAt: this.get('updatedAt')
+            }
+            return character
+        },
+        set(character: CharacterCreationAttributes) {
+            this.setDataValue('name', character.name);
+            this.setDataValue('age',character.age);
+        }
+    })
+    character!: CharacterAttributes
 }
 
 export { Character, CharacterAttributes, CharacterCreationAttributes }

@@ -1,5 +1,5 @@
 import * as db from '../../src/db'
-import { characters } from "../../src/controllers"
+import { characters } from "../../src/controller"
 import { Character, CharacterAttributes, CharacterCreationAttributes } from '../../src/models/character.model'
 import { QueryTypes } from 'sequelize'
 import { faker } from '@faker-js/faker'

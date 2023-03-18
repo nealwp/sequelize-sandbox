@@ -6,7 +6,7 @@ const createServer = (router: Router) => {
 
     server.use(bodyParser.json())
     server.use(bodyParser.urlencoded({extended: true}))
-    server.use(router)
+    server.use('/characters', router)
 
     return server
 }
