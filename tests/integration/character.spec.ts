@@ -3,25 +3,26 @@ import { characters } from "../../src/controllers"
 import { Character, CharacterAttributes, CharacterCreationAttributes } from '../../src/models/character.model'
 import { QueryTypes } from 'sequelize'
 import { faker } from '@faker-js/faker'
+import { insertOneCharacterSql, selectCharacterByIdSql, truncateCharacterSql } from './helpers/sql'
 
 describe('character controller', () => {
     beforeAll(async () => {
         await db.initialize()
-        await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+        await db.client.query(truncateCharacterSql)
     })
 
     afterAll(async () => {
-        await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+        await db.client.query(truncateCharacterSql)
     })
     
     describe('create', () => {
         
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
         })
 
         test('should create a new character', async () => {
@@ -40,7 +41,8 @@ describe('character controller', () => {
                 updatedAt: expect.any(Date)
             })
 
-            const [ dbContents ] = await db.client.query(`select * from character where id = ${result.id}`, {
+            const [ dbContents ] = await db.client.query(selectCharacterByIdSql, {
+                replacements: { id: result.id },
                 mapToModel: true,
                 model: Character,
                 type: QueryTypes.SELECT
@@ -52,11 +54,11 @@ describe('character controller', () => {
     describe('update', () => {
         
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
         })
     
         test('should update an existing character', async () => {
@@ -69,11 +71,7 @@ describe('character controller', () => {
                 updatedAt: faker.date.past(),
             }
             
-            const insertCharacterSql = `
-                insert into character (id, name, age, created_at, updated_at)
-                values (:id, :name, :age, :createdAt, :updatedAt) 
-            `
-            await db.client.query(insertCharacterSql, {
+            await db.client.query(insertOneCharacterSql, {
                 replacements: character,
                 type: QueryTypes.INSERT
             })
@@ -95,7 +93,8 @@ describe('character controller', () => {
                 updatedAt: expect.any(Date)      // updatedAt will be determined by Sequelize
             })
 
-            const [ dbContents ] = await db.client.query<Character>(`select * from character where id = ${character.id}`, {
+            const [ dbContents ] = await db.client.query<Character>(selectCharacterByIdSql, {
+                replacements: { id: character.id },
                 mapToModel: true,
                 model: Character,
                 type: QueryTypes.SELECT
@@ -106,11 +105,11 @@ describe('character controller', () => {
 
     describe('findById', () => {
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
         })
 
         test('should find an existing character for a matching id', async () => {
@@ -125,11 +124,7 @@ describe('character controller', () => {
                 updatedAt: faker.date.past()
             }
             
-            const insertCharacterSql = `
-                insert into character (id, name, age, created_at, updated_at)
-                values (:id, :name, :age, :createdAt, :updatedAt) 
-            `
-            await db.client.query(insertCharacterSql, {
+            await db.client.query(insertOneCharacterSql, {
                 replacements: character,
                 type: QueryTypes.INSERT
             })
@@ -149,11 +144,11 @@ describe('character controller', () => {
     describe('findAll', () => {
         
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
         })
 
         test('should find all characters in the database', async () => {
