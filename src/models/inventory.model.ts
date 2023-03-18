@@ -1,4 +1,4 @@
-import { ModelAttributeColumnOptions } from 'sequelize';
+import { ModelAttributeColumnOptions, TableName, TableNameWithSchema } from 'sequelize';
 import { Table, Column, Model, ForeignKey, HasMany, TableOptions, DataType } from 'sequelize-typescript';
 import { Inventory as InventoryCreationAttributes } from '../@types/inventory.types';
 import { Character } from './character.model';
@@ -9,7 +9,7 @@ interface InventoryAttributes extends InventoryCreationAttributes {
     characterId: number
 }
 
-const tableDefinition: TableOptions = {
+const tableDefinition: TableNameWithSchema = {
     tableName: 'inventory'
 }
 

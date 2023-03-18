@@ -1,5 +1,5 @@
 import { ModelAttributeColumnOptions } from 'sequelize';
-import { Table, Column, Model, HasMany, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany, DataType, TableOptions } from 'sequelize-typescript';
 import { Character as CharacterCreationAttributes} from '../@types/character.types';
 import { Inventory } from './inventory.model';
 
@@ -13,7 +13,7 @@ interface ColumnOptions extends ModelAttributeColumnOptions {
     field: string
 }
 
-export const tableDefinition = {
+export const tableDefinition: TableOptions = {
     tableName: 'characters'
 }
 
