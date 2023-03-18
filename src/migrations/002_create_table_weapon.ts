@@ -1,4 +1,4 @@
-import { columnDefinition, tableDefinition } from '../models/inventory.model'
+import { columnDefinition, tableDefinition } from '../models/weapon.model'
 import type { Migration } from '../db'
 import { TableName } from 'sequelize'
 

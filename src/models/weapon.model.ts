@@ -1,30 +1,73 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { WeaponAttributes, WeaponCreationAttributes, WeaponType } from '../@types/weapon.types';
+import { ModelAttributeColumnOptions } from 'sequelize';
+import { Table, Column, Model, ForeignKey, BelongsTo, TableOptions, DataType } from 'sequelize-typescript';
+import { Weapon as WeaponCreationAttributes } from '../@types/weapon.types';
 import { Inventory } from './inventory.model';
 
-@Table({tableName: 'weapons'})
+interface WeaponAttributes extends WeaponCreationAttributes {
+    id: number,
+}
+
+type WeaponKeys = keyof WeaponAttributes
+
+interface ColumnOptions extends ModelAttributeColumnOptions {
+    field: string
+}
+
+const tableDefinition: TableOptions = {
+    tableName: 'weapon'
+}
+
+const columnDefinition: Record<WeaponKeys, ColumnOptions> = {
+    id: {
+        primaryKey: true,
+        field: 'id',
+        autoIncrement: true,
+        type: DataType.INTEGER
+    },
+    name: {
+        field: 'name',
+        type: DataType.STRING
+    },
+    damage: {
+        field: 'damage',
+        type: DataType.INTEGER
+    },
+    inventoryId: {
+        field: 'inventory_id',
+        type: DataType.INTEGER,
+        references: {
+            model: 'inventory',
+            key: 'id'
+        }
+    },
+    type: {
+        field: 'type',
+        type: DataType.STRING
+    }
+}
+
+
+@Table(tableDefinition)
 class Weapon extends Model<WeaponAttributes, WeaponCreationAttributes> implements WeaponAttributes{
     
-    @PrimaryKey
-    @AutoIncrement
-    @Column
+    @Column(columnDefinition.id)
     id!: number
 
     @ForeignKey(() => Inventory)
-    @Column
+    @Column(columnDefinition.inventoryId)
     inventoryId!: number
 
     @BelongsTo(() => Inventory)
     inventory!: Inventory
 
-    @Column
+    @Column(columnDefinition.name)
     name!: string
 
-    @Column
+    @Column(columnDefinition.damage)
     damage!: number
 
-    @Column
-    type!: WeaponType
+    @Column(columnDefinition.type)
+    type!: string
 }
 
-export { Weapon }
+export { Weapon, WeaponAttributes, WeaponCreationAttributes, columnDefinition, tableDefinition }

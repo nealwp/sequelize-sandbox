@@ -1,4 +1,4 @@
-import { WeaponCreationAttributes } from "../../../src/@types/weapon.types"
+import { WeaponCreationAttributes } from "../../../src/models/weapon.model"
 import { weapons } from "../../../src/controllers"
 import { Weapon } from "../../../src/models"
 

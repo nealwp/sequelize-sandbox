@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { weapons } from "../controllers";
-import { WeaponCreationAttributes } from "../@types/weapon.types";
+import { WeaponCreationAttributes } from "../models/weapon.model";
 
 const router = Router()
 

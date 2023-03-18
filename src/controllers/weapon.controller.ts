@@ -1,5 +1,10 @@
-import { WeaponAttributes, WeaponController, WeaponCreationAttributes } from "../@types/weapon.types";
+import { WeaponAttributes, WeaponCreationAttributes } from "../models/weapon.model";
 import { Weapon } from "../models";
+import { Controller } from "../@types/controller.types";
+
+interface WeaponController extends Controller<Weapon, WeaponAttributes, WeaponCreationAttributes> {
+    addToInventory: (id: number, inventoryId: number) => Promise<Weapon>
+}
 
 const create = async (weapon: WeaponCreationAttributes): Promise<Weapon> => {
     return await Weapon.create(weapon)

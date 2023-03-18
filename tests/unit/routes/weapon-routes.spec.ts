@@ -3,7 +3,7 @@ import router from '../../../src/routes/weapon.routes'
 import { Express } from 'express-serve-static-core'
 import { createServer } from '../../../src/server'
 import { weapons } from '../../../src/controllers'
-import { WeaponCreationAttributes } from '../../../src/@types/weapon.types'
+import { WeaponCreationAttributes } from '../../../src/models/weapon.model'
 
 let server: Express;
 
