@@ -160,11 +160,7 @@ describe('inventory controller', () => {
                 updatedAt: faker.date.past()
             }
             
-            const insertInventorySql = `
-                insert into inventory (id, character_id, created_at, updated_at)
-                values (:id, :characterId, :createdAt, :updatedAt) 
-            `
-            await db.client.query(insertInventorySql, {
+            await db.client.query(insertOneInventorySql, {
                 replacements: newInventory,
                 type: QueryTypes.INSERT
             })
