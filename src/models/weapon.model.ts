@@ -13,7 +13,7 @@ interface ColumnOptions extends ModelAttributeColumnOptions {
     field: string
 }
 
-const tableDefinition: TableOptions = {
+const tableDefinition = {
     tableName: 'weapon'
 }
 

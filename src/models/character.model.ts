@@ -13,7 +13,7 @@ interface ColumnOptions extends ModelAttributeColumnOptions {
     field: string
 }
 
-export const tableDefinition: TableOptions = {
+export const tableDefinition = {
     tableName: 'characters'
 }
 
