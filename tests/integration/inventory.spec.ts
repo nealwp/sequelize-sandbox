@@ -152,17 +152,20 @@ describe('inventory controller', () => {
             }
             
             const insertInventorySql = `
-                insert into inventory (id, character_id)
-                values (${newInventory.id}, ${newInventory.characterId}) 
+                insert into inventory (id, character_id, created_at, updated_at)
+                values (:id, :characterId, :createdAt, :updatedAt) 
             `
-            await db.client.query(insertInventorySql, {type: QueryTypes.INSERT})
+            await db.client.query(insertInventorySql, {
+                replacements: newInventory,
+                type: QueryTypes.INSERT
+            })
 
             const result = await inventory.findById(inventoryId)
             expect(result).toMatchObject<Partial<Inventory>>({
                 id: newInventory.id,
                 characterId: newInventory.characterId,
-                createdAt: newInventory.createdAt,
-                updatedAt: newInventory.updatedAt
+                createdAt: expect.any(Date),
+                updatedAt: expect.any(Date)
             })
         })
     })

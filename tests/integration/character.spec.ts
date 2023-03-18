@@ -40,8 +40,12 @@ describe('character controller', () => {
                 updatedAt: expect.any(Date)
             })
 
-            const [ dbContents ] = await db.client.query(`select * from character where id = ${result.id}`, {type: QueryTypes.SELECT})
-            expect(dbContents).toEqual(result.toJSON()) 
+            const [ dbContents ] = await db.client.query(`select * from character where id = ${result.id}`, {
+                mapToModel: true,
+                model: Character,
+                type: QueryTypes.SELECT
+            })
+            expect(dbContents.dataValues).toEqual(result.toJSON()) 
         })
     })
 
@@ -66,16 +70,19 @@ describe('character controller', () => {
             }
             
             const insertCharacterSql = `
-                insert into character (id, name, age)
-                values (${character.id}, '${character.name}', ${character.age}) 
+                insert into character (id, name, age, created_at, updated_at)
+                values (:id, :name, :age, :createdAt, :updatedAt) 
             `
-            await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
+            await db.client.query(insertCharacterSql, {
+                replacements: character,
+                type: QueryTypes.INSERT
+            })
 
             const updatedCharacter: CharacterAttributes = {
                 id: character.id as number,
                 name:  faker.name.fullName(),
                 age: faker.datatype.number({min: 0, max: 100}),
-                createdAt: new Date(),
+                createdAt: new Date(), 
                 updatedAt: new Date()
             }
 
@@ -84,12 +91,16 @@ describe('character controller', () => {
                 id: character.id,
                 name: updatedCharacter.name,
                 age: updatedCharacter.age,
-                createdAt: expect.any(Date),
-                updatedAt: expect.any(Date)
+                createdAt: character.createdAt,  // createdAt should not change
+                updatedAt: expect.any(Date)      // updatedAt will be determined by Sequelize
             })
 
-            const [ dbContents ] = await db.client.query(`select * from character where id = ${character.id}`, {type: QueryTypes.SELECT})
-            expect(dbContents).toEqual(result.toJSON())
+            const [ dbContents ] = await db.client.query<Character>(`select * from character where id = ${character.id}`, {
+                mapToModel: true,
+                model: Character,
+                type: QueryTypes.SELECT
+            })
+            expect(dbContents.dataValues).toEqual(result.toJSON())
         })
     })
 
@@ -115,10 +126,13 @@ describe('character controller', () => {
             }
             
             const insertCharacterSql = `
-                insert into character (id, name, age)
-                values (${character.id}, '${character.name}', ${character.age}) 
+                insert into character (id, name, age, created_at, updated_at)
+                values (:id, :name, :age, :createdAt, :updatedAt) 
             `
-            await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
+            await db.client.query(insertCharacterSql, {
+                replacements: character,
+                type: QueryTypes.INSERT
+            })
 
             const result = await characters.findById(characterId)
             expect(result).toMatchObject<Partial<Character>>({
@@ -126,8 +140,8 @@ describe('character controller', () => {
                 name: character.name,
                 age: character.age,
                 inventory: expect.any(Array),
-                createdAt: expect.any(Date),
-                updatedAt: expect.any(Date)
+                createdAt: character.createdAt,
+                updatedAt: character.updatedAt
             })
         })
     })
