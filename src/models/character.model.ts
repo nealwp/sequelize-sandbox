@@ -13,11 +13,11 @@ interface ColumnOptions extends ModelAttributeColumnOptions {
     field: string
 }
 
-const tableDefinition = {
+export const tableDefinition = {
     tableName: 'characters'
 }
 
-const columnDefinition: Record<CharacterKeys, ColumnOptions> = {
+export const columnDefinition: Record<CharacterKeys, ColumnOptions> = {
     id: {
         primaryKey: true,
         field: 'id',

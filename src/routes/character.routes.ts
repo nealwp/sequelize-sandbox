@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CharacterCreationAttributes } from "../@types/character.types";
+import { CharacterCreationAttributes } from "../models/character.model";
 import { characters } from "../controllers";
 
 const router = Router()

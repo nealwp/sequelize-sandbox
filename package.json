@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest ./tests/unit",
     "test:integration": "npm run test-db:start && jest --detectOpenHandles ./tests/integration",
-    "dev": "nodemon src/app.ts",
+    "dev": "npm run test-db:start && nodemon src/app.ts",
     "db:start": "docker run --rm --name postgres_sequelize -p 5432:5432 -v sequelize-pgdata:/var/lib/postgresql/data -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=scratch -d postgres",
     "db:stop": "docker stop postgres_sequelize",
     "test-db:start": "docker run --rm --name sequelize_tests -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=scratch -d postgres",
@@ -35,6 +35,7 @@
   "dependencies": {
     "body-parser": "^1.20.1",
     "express": "^4.18.2",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "umzug": "^3.2.1"
   }
 }
