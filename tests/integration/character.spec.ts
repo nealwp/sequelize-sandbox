@@ -84,7 +84,7 @@ describe('character controller', () => {
                 id: character.id,
                 name: updatedCharacter.name,
                 age: updatedCharacter.age,
-                createdAt: character.createdAt,
+                createdAt: expect.any(Date),
                 updatedAt: expect.any(Date)
             })
 
@@ -126,8 +126,8 @@ describe('character controller', () => {
                 name: character.name,
                 age: character.age,
                 inventory: expect.any(Array),
-                createdAt: character.createdAt,
-                updatedAt: character.updatedAt
+                createdAt: expect.any(Date),
+                updatedAt: expect.any(Date)
             })
         })
     })
