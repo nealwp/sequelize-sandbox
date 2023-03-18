@@ -1,4 +1,4 @@
-import { CharacterCreationAttributes } from "../../../src/@types/character.types"
+import { CharacterCreationAttributes } from "../../../src/models/character.model"
 import { characters } from "../../../src/controllers"
 import { Character } from "../../../src/models"
 

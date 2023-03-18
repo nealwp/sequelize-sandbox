@@ -1,4 +1,4 @@
-import { InventoryCreationAttributes } from "../../../src/@types/inventory.types"
+import { InventoryCreationAttributes } from "../../../src/models/inventory.model"
 import { inventory } from "../../../src/controllers"
 import { Inventory } from "../../../src/models"
 
