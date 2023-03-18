@@ -4,23 +4,24 @@ import { inventory } from "../../src/controllers"
 import { Character, Inventory } from '../../src/models'
 import { QueryTypes } from 'sequelize'
 import { faker } from '@faker-js/faker'
+import { insertOneCharacterSql, insertOneInventorySql, selectInventoryByIdSql, truncateCharacterSql, truncateInventorySql } from './helpers/sql'
 
 describe('inventory controller', () => {
     beforeAll(async () => {
         await db.initialize()
-        await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
-        await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+        await db.client.query(truncateInventorySql)
+        await db.client.query(truncateCharacterSql)
     })
 
     afterAll(async () => {
-        await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
-        await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+        await db.client.query(truncateInventorySql)
+        await db.client.query(truncateCharacterSql)
     })
     
     describe('create', () => {
         
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
+            await db.client.query(truncateInventorySql)
 
             const character: Partial<Character> = {
                 id: 1234,
@@ -30,15 +31,14 @@ describe('inventory controller', () => {
                 updatedAt: faker.date.past(),
             }
             
-            const insertCharacterSql = `
-                insert into character (id, name, age)
-                values (${character.id}, '${character.name}', ${character.age}) 
-            `
-            await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
+            await db.client.query(insertOneCharacterSql, {
+                replacements: character,
+                type: QueryTypes.INSERT
+            })
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
         })
 
         test('should create a new inventory', async () => {
@@ -55,16 +55,21 @@ describe('inventory controller', () => {
                 updatedAt: expect.any(Date)
             })
 
-            const [ dbContents ] = await db.client.query(`select * from inventory where id = ${result.id}`, {type: QueryTypes.SELECT})
-            expect(dbContents).toEqual(result.toJSON()) 
+            const [ dbContents ] = await db.client.query(selectInventoryByIdSql, {
+                replacements: {id: result.id},
+                model: Inventory,
+                mapToModel: true,
+                type: QueryTypes.SELECT
+            })
+            expect(dbContents.dataValues).toEqual(result.toJSON()) 
         })
     })
 
     describe('update', () => {
         
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateInventorySql)
+            await db.client.query(truncateCharacterSql)
 
             const characterOne: Partial<Character> = { id: 1234 }
             const characterTwo: Partial<Character> = { id: 5678 }
@@ -80,8 +85,8 @@ describe('inventory controller', () => {
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
-            await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
+            await db.client.query(truncateInventorySql)
         })
 
         test('should update an existing inventory', async () => {
@@ -92,12 +97,11 @@ describe('inventory controller', () => {
                 createdAt: faker.date.past(),
                 updatedAt: faker.date.past(),
             }
-            
-            const insertInventorySql = `
-                insert into inventory (id, character_id)
-                values (${newInventory.id}, ${newInventory.characterId}) 
-            `
-            await db.client.query(insertInventorySql, {type: QueryTypes.INSERT})
+
+            await db.client.query(insertOneInventorySql, {
+                replacements: newInventory,
+                type: QueryTypes.INSERT
+            })
 
             const updatedInventory: InventoryAttributes = {
                 id: newInventory.id as number,
@@ -114,16 +118,21 @@ describe('inventory controller', () => {
                 updatedAt: expect.any(Date)
             })
 
-            const [ dbContents ] = await db.client.query(`select * from inventory where id = ${newInventory.id}`, {type: QueryTypes.SELECT})
-            expect(dbContents).toEqual(result.toJSON())
+            const [ dbContents ] = await db.client.query(selectInventoryByIdSql, {
+                replacements: {id: result.id},
+                mapToModel: true,
+                model: Inventory,
+                type: QueryTypes.SELECT
+            })
+            expect(dbContents.dataValues).toEqual(result.toJSON())
         })
     })
 
     describe('findById', () => {
         
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateInventorySql)
+            await db.client.query(truncateCharacterSql)
 
             const characterOne: Partial<Character> = { id: 1234 }
             
@@ -136,8 +145,8 @@ describe('inventory controller', () => {
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
-            await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
+            await db.client.query(truncateInventorySql)
         })
 
         test('should find an existing inventory for a matching id', async () => {
@@ -173,8 +182,8 @@ describe('inventory controller', () => {
     describe('findAll', () => {
         
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
+            await db.client.query(truncateInventorySql)
+            await db.client.query(truncateCharacterSql)
 
             const characterRecords = Array.from({length: 10}, (elem, index) => {
                 const character: Partial<Character> = { id: index }
@@ -192,8 +201,8 @@ describe('inventory controller', () => {
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
-            await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
+            await db.client.query(truncateCharacterSql)
+            await db.client.query(truncateInventorySql)
         })
 
         test('should find all inventory in the database', async () => {          
