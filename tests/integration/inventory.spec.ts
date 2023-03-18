@@ -1,5 +1,5 @@
 import * as db from '../../src/db'
-import { InventoryAttributes, InventoryCreationAttributes } from "../../src/@types/inventory.types"
+import { InventoryAttributes, InventoryCreationAttributes } from "../../src/models/inventory.model"
 import { inventory } from "../../src/controllers"
 import { Character, Inventory } from '../../src/models'
 import { QueryTypes } from 'sequelize'

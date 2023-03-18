@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { InventoryCreationAttributes } from "../@types/inventory.types";
+import { InventoryCreationAttributes } from "../models/inventory.model";
 import { inventory } from "../controllers";
 
 const router = Router()

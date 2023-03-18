@@ -3,7 +3,7 @@ import router from '../../../src/routes/inventory.routes'
 import { Express } from 'express-serve-static-core'
 import { createServer } from '../../../src/server'
 import { inventory } from '../../../src/controllers'
-import { InventoryCreationAttributes } from '../../../src/@types/inventory.types'
+import { InventoryCreationAttributes } from '../../../src/models/inventory.model'
 
 let server: Express;
 

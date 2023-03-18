@@ -1,5 +1,8 @@
-import { InventoryAttributes, InventoryController, InventoryCreationAttributes } from "../@types/inventory.types";
+import { Controller } from "../@types/controller.types";
+import { InventoryAttributes, InventoryCreationAttributes } from "../models/inventory.model";
 import { Inventory, Weapon } from "../models";
+
+interface InventoryController extends Controller<Inventory, InventoryAttributes, InventoryCreationAttributes> {}
 
 const findAll = async () => {
     return Inventory.findAll({include: Weapon})

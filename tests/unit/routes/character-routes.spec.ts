@@ -3,7 +3,7 @@ import router from '../../../src/routes/character.routes'
 import { Express } from 'express-serve-static-core'
 import { createServer } from '../../../src/server'
 import { characters } from '../../../src/controllers'
-import { CharacterCreationAttributes } from '../../../src/@types/character.types'
+import { CharacterCreationAttributes } from '../../../src/models/character.model'
 
 let server: Express;
 

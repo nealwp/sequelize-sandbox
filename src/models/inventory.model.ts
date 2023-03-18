@@ -1,25 +1,53 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
-import { InventoryAttributes, InventoryCreationAttributes } from '../@types/inventory.types';
+import { ModelAttributeColumnOptions } from 'sequelize';
+import { Table, Column, Model, ForeignKey, HasMany, TableOptions, DataType } from 'sequelize-typescript';
+import { Inventory as InventoryCreationAttributes } from '../@types/inventory.types';
 import { Character } from './character.model';
 import { Weapon } from './weapon.model';
 
-@Table({tableName: 'inventory'})
+interface InventoryAttributes extends InventoryCreationAttributes {
+    id: number,
+    characterId: number
+}
+
+const tableDefinition: TableOptions = {
+    tableName: 'inventory'
+}
+
+interface ColumnOptions extends ModelAttributeColumnOptions {
+    field: string
+}
+
+type InventoryKeys = keyof InventoryAttributes
+
+const columnDefinition: Record<InventoryKeys, ColumnOptions> = {
+    id: {
+        primaryKey: true,
+        field: 'id',
+        autoIncrement: true,
+        type: DataType.INTEGER
+    },
+    characterId: {
+        field: 'character_id',
+        type: DataType.STRING,
+        references: {
+            model: 'character',
+            key: 'id'
+        }
+    },
+}
+
+@Table(tableDefinition)
 class Inventory extends Model<InventoryAttributes, InventoryCreationAttributes> implements InventoryAttributes {
-    
-    @PrimaryKey
-    @AutoIncrement
-    @Column
+
+    @Column(columnDefinition.id)
     id!: number
 
     @ForeignKey(() => Character)
-    @Column
+    @Column(columnDefinition.characterId)
     characterId!: number
-
-    @BelongsTo(() => Character)
-    character!: Character
 
     @HasMany(() => Weapon)
     weapons!: Weapon[]
 }
 
-export { Inventory }
+export { Inventory, InventoryAttributes, InventoryCreationAttributes, columnDefinition, tableDefinition }
