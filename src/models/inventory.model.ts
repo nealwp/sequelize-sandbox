@@ -1,12 +1,14 @@
 import { ModelAttributeColumnOptions } from 'sequelize';
-import { Table, Column, Model, ForeignKey, HasMany, TableOptions, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, HasMany, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { Inventory as InventoryCreationAttributes } from '../@types/inventory.types';
 import { Character } from './character.model';
 import { Weapon } from './weapon.model';
 
 interface InventoryAttributes extends InventoryCreationAttributes {
     id: number,
-    characterId: number
+    characterId: number,
+    createdAt: Date,
+    updatedAt: Date
 }
 
 const tableDefinition = {
@@ -28,12 +30,20 @@ const columnDefinition: Record<InventoryKeys, ColumnOptions> = {
     },
     characterId: {
         field: 'character_id',
-        type: DataType.STRING,
+        type: DataType.INTEGER,
         references: {
             model: 'character',
             key: 'id'
         }
     },
+    createdAt: {
+        field: 'created_at',
+        type: DataType.DATE
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: DataType.DATE
+    }
 }
 
 @Table(tableDefinition)
@@ -48,6 +58,14 @@ class Inventory extends Model<InventoryAttributes, InventoryCreationAttributes> 
 
     @HasMany(() => Weapon)
     weapons!: Weapon[]
+
+    @CreatedAt
+    @Column(columnDefinition.createdAt)
+    createdAt!: Date
+
+    @UpdatedAt
+    @Column(columnDefinition.updatedAt)
+    updatedAt!: Date
 }
 
 export { Inventory, InventoryAttributes, InventoryCreationAttributes, columnDefinition, tableDefinition }

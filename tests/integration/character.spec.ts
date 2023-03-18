@@ -7,21 +7,21 @@ import { faker } from '@faker-js/faker'
 describe('character controller', () => {
     beforeAll(async () => {
         await db.initialize()
-        await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
     })
 
     afterAll(async () => {
-        await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
     })
     
     describe('create', () => {
         
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
         })
 
         test('should create a new character', async () => {
@@ -40,7 +40,7 @@ describe('character controller', () => {
                 updatedAt: expect.any(Date)
             })
 
-            const [ dbContents ] = await db.client.query(`select * from characters where id = ${result.id}`, {type: QueryTypes.SELECT})
+            const [ dbContents ] = await db.client.query(`select * from character where id = ${result.id}`, {type: QueryTypes.SELECT})
             expect(dbContents).toEqual(result.toJSON()) 
         })
     })
@@ -48,11 +48,11 @@ describe('character controller', () => {
     describe('update', () => {
         
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
         })
     
         test('should update an existing character', async () => {
@@ -61,13 +61,13 @@ describe('character controller', () => {
                 id: faker.datatype.number({precision: 1}),
                 name: faker.name.fullName(),
                 age: faker.datatype.number({min: 0, max: 100}),
-                createdAt: faker.date.past().toISOString(),
-                updatedAt: faker.date.past().toISOString(),
+                createdAt: faker.date.past(),
+                updatedAt: faker.date.past(),
             }
             
             const insertCharacterSql = `
-                insert into characters (id, name, age, "createdAt", "updatedAt")
-                values (${character.id}, '${character.name}', ${character.age}, '${character.createdAt}', '${character.updatedAt}') 
+                insert into character (id, name, age)
+                values (${character.id}, '${character.name}', ${character.age}) 
             `
             await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
 
@@ -75,6 +75,8 @@ describe('character controller', () => {
                 id: character.id as number,
                 name:  faker.name.fullName(),
                 age: faker.datatype.number({min: 0, max: 100}),
+                createdAt: new Date(),
+                updatedAt: new Date()
             }
 
             const result = await characters.update(updatedCharacter)
@@ -82,22 +84,22 @@ describe('character controller', () => {
                 id: character.id,
                 name: updatedCharacter.name,
                 age: updatedCharacter.age,
-                createdAt: new Date(character.createdAt),
+                createdAt: character.createdAt,
                 updatedAt: expect.any(Date)
             })
 
-            const [ dbContents ] = await db.client.query(`select * from characters where id = ${character.id}`, {type: QueryTypes.SELECT})
+            const [ dbContents ] = await db.client.query(`select * from character where id = ${character.id}`, {type: QueryTypes.SELECT})
             expect(dbContents).toEqual(result.toJSON())
         })
     })
 
     describe('findById', () => {
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
         })
 
         test('should find an existing character for a matching id', async () => {
@@ -108,13 +110,13 @@ describe('character controller', () => {
                 id: characterId,
                 name: faker.name.fullName(),
                 age: faker.datatype.number({min: 0, max: 100}),
-                createdAt: faker.date.past().toISOString(),
-                updatedAt: faker.date.past().toISOString()
+                createdAt: faker.date.past(),
+                updatedAt: faker.date.past()
             }
             
             const insertCharacterSql = `
-                insert into characters (id, name, age, "createdAt", "updatedAt")
-                values (${character.id}, '${character.name}', ${character.age}, '${character.createdAt}', '${character.updatedAt}') 
+                insert into character (id, name, age)
+                values (${character.id}, '${character.name}', ${character.age}) 
             `
             await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
 
@@ -124,8 +126,8 @@ describe('character controller', () => {
                 name: character.name,
                 age: character.age,
                 inventory: expect.any(Array),
-                createdAt: new Date(character.createdAt),
-                updatedAt: new Date(character.updatedAt)
+                createdAt: character.createdAt,
+                updatedAt: character.updatedAt
             })
         })
     })
@@ -133,11 +135,11 @@ describe('character controller', () => {
     describe('findAll', () => {
         
         beforeEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
         })
 
         test('should find all characters in the database', async () => {
@@ -147,16 +149,16 @@ describe('character controller', () => {
                     id: faker.datatype.number({precision: 1}),
                     name: faker.name.fullName(),
                     age: faker.datatype.number({min: 0, max: 100}),
-                    createdAt: faker.date.past().toISOString(),
-                    updatedAt: faker.date.past().toISOString()
+                    createdAt: faker.date.past(),
+                    updatedAt: faker.date.past()
                 }
                 return character
             })
             
             for (const character of characterRecords) {
                 const insertCharacterSql = `
-                    insert into characters (id, name, age, "createdAt", "updatedAt")
-                    values (${character.id}, '${character.name}', ${character.age}, '${character.createdAt}', '${character.updatedAt}') 
+                    insert into character (id, name, age)
+                    values (${character.id}, '${character.name}', ${character.age}) 
                 `
                 await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
             }

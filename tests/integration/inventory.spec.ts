@@ -9,12 +9,12 @@ describe('inventory controller', () => {
     beforeAll(async () => {
         await db.initialize()
         await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
-        await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
     })
 
     afterAll(async () => {
         await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
-        await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+        await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
     })
     
     describe('create', () => {
@@ -26,19 +26,19 @@ describe('inventory controller', () => {
                 id: 1234,
                 name: faker.name.fullName(),
                 age: faker.datatype.number({min: 0, max: 100}),
-                createdAt: faker.date.past().toISOString(),
-                updatedAt: faker.date.past().toISOString(),
+                createdAt: faker.date.past(),
+                updatedAt: faker.date.past(),
             }
             
             const insertCharacterSql = `
-                insert into characters (id, name, age, "createdAt", "updatedAt")
-                values (${character.id}, '${character.name}', ${character.age}, '${character.createdAt}', '${character.updatedAt}') 
+                insert into character (id, name, age)
+                values (${character.id}, '${character.name}', ${character.age}) 
             `
             await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
         })
 
         test('should create a new inventory', async () => {
@@ -64,23 +64,23 @@ describe('inventory controller', () => {
         
         beforeEach(async () => {
             await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
 
             const characterOne: Partial<Character> = { id: 1234 }
             const characterTwo: Partial<Character> = { id: 5678 }
             
             const insertCharactersSql = `
-                insert into characters (id, "createdAt", "updatedAt") 
+                insert into character (id) 
                 values 
-                    (${characterOne.id}, '${new Date().toISOString()}', '${new Date().toISOString()}'),
-                    (${characterTwo.id}, '${new Date().toISOString()}', '${new Date().toISOString()}')
+                    (${characterOne.id}),
+                    (${characterTwo.id})
                      
             `
             await db.client.query(insertCharactersSql, {type: QueryTypes.INSERT})
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
             await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
         })
 
@@ -89,26 +89,28 @@ describe('inventory controller', () => {
             const newInventory: Partial<Inventory> = {
                 id: faker.datatype.number({precision: 1}),
                 characterId: 1234,
-                createdAt: faker.date.past().toISOString(),
-                updatedAt: faker.date.past().toISOString(),
+                createdAt: faker.date.past(),
+                updatedAt: faker.date.past(),
             }
             
             const insertInventorySql = `
-                insert into inventory (id, "characterId", "createdAt", "updatedAt")
-                values (${newInventory.id}, ${newInventory.characterId}, '${newInventory.createdAt}', '${newInventory.updatedAt}') 
+                insert into inventory (id, character_id)
+                values (${newInventory.id}, ${newInventory.characterId}) 
             `
             await db.client.query(insertInventorySql, {type: QueryTypes.INSERT})
 
             const updatedInventory: InventoryAttributes = {
                 id: newInventory.id as number,
                 characterId: 5678,
+                createdAt: new Date(),
+                updatedAt: new Date()
             }
 
             const result = await inventory.update(updatedInventory)
             expect(result).toMatchObject<Partial<Inventory>>({
                 id: newInventory.id,
                 characterId: updatedInventory.characterId,
-                createdAt: new Date(newInventory.createdAt),
+                createdAt: newInventory.createdAt,
                 updatedAt: expect.any(Date)
             })
 
@@ -121,20 +123,20 @@ describe('inventory controller', () => {
         
         beforeEach(async () => {
             await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
 
             const characterOne: Partial<Character> = { id: 1234 }
             
             const insertCharactersSql = `
-                insert into characters (id, "createdAt", "updatedAt") 
+                insert into character (id) 
                 values 
-                    (${characterOne.id}, '${new Date().toISOString()}', '${new Date().toISOString()}')         
+                    (${characterOne.id})         
             `
             await db.client.query(insertCharactersSql, {type: QueryTypes.INSERT})
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
             await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
         })
 
@@ -145,13 +147,13 @@ describe('inventory controller', () => {
             const newInventory: Partial<Inventory> = {
                 id: inventoryId,
                 characterId: 1234,
-                createdAt: faker.date.past().toISOString(),
-                updatedAt: faker.date.past().toISOString()
+                createdAt: faker.date.past(),
+                updatedAt: faker.date.past()
             }
             
             const insertInventorySql = `
-                insert into inventory (id, "characterId", "createdAt", "updatedAt")
-                values (${newInventory.id}, ${newInventory.characterId}, '${newInventory.createdAt}', '${newInventory.updatedAt}') 
+                insert into inventory (id, character_id)
+                values (${newInventory.id}, ${newInventory.characterId}) 
             `
             await db.client.query(insertInventorySql, {type: QueryTypes.INSERT})
 
@@ -159,8 +161,8 @@ describe('inventory controller', () => {
             expect(result).toMatchObject<Partial<Inventory>>({
                 id: newInventory.id,
                 characterId: newInventory.characterId,
-                createdAt: new Date(newInventory.createdAt),
-                updatedAt: new Date(newInventory.updatedAt)
+                createdAt: newInventory.createdAt,
+                updatedAt: newInventory.updatedAt
             })
         })
     })
@@ -169,7 +171,7 @@ describe('inventory controller', () => {
         
         beforeEach(async () => {
             await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
 
             const characterRecords = Array.from({length: 10}, (elem, index) => {
                 const character: Partial<Character> = { id: index }
@@ -178,8 +180,8 @@ describe('inventory controller', () => {
 
             for (const record of characterRecords) {
                 const insertCharacterSql = `
-                    insert into characters (id, "createdAt", "updatedAt") 
-                    values (${record.id}, '${new Date().toISOString()}', '${new Date().toISOString()}')         
+                    insert into character (id) 
+                    values (${record.id})         
                 `
                 await db.client.query(insertCharacterSql, {type: QueryTypes.INSERT})
             }
@@ -187,7 +189,7 @@ describe('inventory controller', () => {
         })
 
         afterEach(async () => {
-            await db.client.query('TRUNCATE TABLE characters RESTART IDENTITY CASCADE')
+            await db.client.query('TRUNCATE TABLE character RESTART IDENTITY CASCADE')
             await db.client.query('TRUNCATE TABLE inventory RESTART IDENTITY CASCADE')
         })
 
@@ -203,8 +205,8 @@ describe('inventory controller', () => {
             
             for (const record of inventoryRecords) {
                 const insertInventorySql = `
-                    insert into inventory (id, "characterId", "createdAt", "updatedAt")
-                    values (${record.id}, ${record.characterId}, '${new Date().toISOString()}', '${new Date().toISOString()}') 
+                    insert into inventory (id, character_id)
+                    values (${record.id}, ${record.characterId}) 
                 `
                 await db.client.query(insertInventorySql, {type: QueryTypes.INSERT})
             }

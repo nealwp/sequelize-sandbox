@@ -1,10 +1,12 @@
 import { ModelAttributeColumnOptions } from 'sequelize';
-import { Table, Column, Model, ForeignKey, BelongsTo, TableOptions, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, BelongsTo, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { Weapon as WeaponCreationAttributes } from '../@types/weapon.types';
 import { Inventory } from './inventory.model';
 
 interface WeaponAttributes extends WeaponCreationAttributes {
     id: number,
+    createdAt: Date,
+    updatedAt: Date
 }
 
 type WeaponKeys = keyof WeaponAttributes
@@ -43,6 +45,14 @@ const columnDefinition: Record<WeaponKeys, ColumnOptions> = {
     type: {
         field: 'type',
         type: DataType.STRING
+    },
+    createdAt: {
+        field: 'created_at',
+        type: DataType.DATE
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: DataType.DATE
     }
 }
 
@@ -68,6 +78,14 @@ class Weapon extends Model<WeaponAttributes, WeaponCreationAttributes> implement
 
     @Column(columnDefinition.type)
     type!: string
+
+    @CreatedAt
+    @Column(columnDefinition.createdAt)
+    createdAt!: Date
+
+    @UpdatedAt
+    @Column(columnDefinition.updatedAt)
+    updatedAt!: Date
 }
 
 export { Weapon, WeaponAttributes, WeaponCreationAttributes, columnDefinition, tableDefinition }

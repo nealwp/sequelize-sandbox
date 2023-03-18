@@ -1,10 +1,12 @@
 import { ModelAttributeColumnOptions } from 'sequelize';
-import { Table, Column, Model, HasMany, DataType, TableOptions } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany, DataType, TableOptions, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { Character as CharacterCreationAttributes} from '../@types/character.types';
 import { Inventory } from './inventory.model';
 
 interface CharacterAttributes extends CharacterCreationAttributes {
-    id: number
+    id: number,
+    createdAt: Date,
+    updatedAt: Date
 }
 
 type CharacterKeys = keyof CharacterAttributes
@@ -14,7 +16,7 @@ interface ColumnOptions extends ModelAttributeColumnOptions {
 }
 
 export const tableDefinition = {
-    tableName: 'characters'
+    tableName: 'character'
 }
 
 export const columnDefinition: Record<CharacterKeys, ColumnOptions> = {
@@ -31,6 +33,14 @@ export const columnDefinition: Record<CharacterKeys, ColumnOptions> = {
     age: {
         field: 'age',
         type: DataType.INTEGER
+    },
+    createdAt: {
+        field: 'created_at',
+        type: DataType.DATE
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: DataType.DATE
     }
 }
 
@@ -45,6 +55,14 @@ class Character extends Model<CharacterAttributes, CharacterCreationAttributes> 
 
     @Column(columnDefinition.age)
     age!: number
+
+    @CreatedAt
+    @Column(columnDefinition.createdAt)
+    createdAt!: Date
+
+    @UpdatedAt
+    @Column(columnDefinition.updatedAt)
+    updatedAt!: Date
 
     @HasMany(() => Inventory)
     inventory!: Inventory[]

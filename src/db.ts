@@ -43,8 +43,8 @@ export type Migration = typeof umzug._types.migration
 const initialize = async () => {
   try {
     await sequelize.authenticate();
-    await umzug.up()
-    console.log("All models were synchronized successfully.");
+    return umzug.up()
+    //console.log("All models were synchronized successfully.");
   } catch (error) {
     console.error(`Error initializing database: ${error}`)
   }

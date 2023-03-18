@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "jest ./tests/unit",
-    "test:integration": "npm run test-db:start && jest --detectOpenHandles ./tests/integration",
-    "dev": "npm run test-db:start && nodemon src/app.ts",
+    "test:integration": "npm run test-db:cycle && jest --detectOpenHandles ./tests/integration",
+    "dev": "npm run test-db:cycle && nodemon src/app.ts",
     "db:start": "docker run --rm --name postgres_sequelize -p 5432:5432 -v sequelize-pgdata:/var/lib/postgresql/data -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=scratch -d postgres",
     "db:stop": "docker stop postgres_sequelize",
-    "test-db:start": "docker run --rm --name sequelize_tests -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=scratch -d postgres",
-    "test-db:stop": "docker stop sequelize_tests"
+    "test-db:cycle": "npm run test-db:stop && npm run test-db:start || npm run test-db:start",
+    "test-db:start": "docker run --rm --name tests -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=scratch -d postgres",
+    "test-db:stop": "docker stop tests"
   },
   "author": "nealwp",
   "license": "ISC",
