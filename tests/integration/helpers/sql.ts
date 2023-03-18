@@ -18,5 +18,6 @@ export const insertOneWeaponSql = ``
 // select by id
 export const selectCharacterByIdSql = `select * from character where id = :id`
 export const selectInventoryByIdSql = `select * from inventory where id = :id`
+export const selectInventoryByCharacterIdSql = `select * from inventory where character_id = :characterId`
 export const selectWeaponByIdSql = `select * from weapon where id = :id`
 

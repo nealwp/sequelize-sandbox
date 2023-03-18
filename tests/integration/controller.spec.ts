@@ -15,7 +15,7 @@ describe('character controller', () => {
         await db.client.query(truncateCharacterSql)
     })
     
-    describe('create', () => {
+    describe('upsert', () => {
         
         beforeEach(async () => {
             await db.client.query(truncateCharacterSql)
@@ -25,42 +25,37 @@ describe('character controller', () => {
             await db.client.query(truncateCharacterSql)
         })
 
-        test('should create a new character', async () => {
-            const character: CharacterCreationAttributes = {
+        test('should create a new character if not exists', async () => {
+            const character = {
                 name: faker.name.fullName(),
                 age: faker.datatype.number({min: 0, max: 100}),
+                inventory: []
             }
              
-            const result = await characters.create(character)
+            const result = await characters.upsert(character)
             
-            expect(result).toMatchObject<Partial<Character>>({
-                id: expect.any(Number),
-                name: character.name,
-                age: character.age,
-                createdAt: expect.any(Date),
-                updatedAt: expect.any(Date)
+            expect(result).toMatchObject({
+                body: {
+                    character: {
+                        id: expect.any(Number),
+                        name: character.name,
+                        age: character.age,
+                        createdAt: expect.any(Date),
+                        updatedAt: expect.any(Date)
+                    },
+                    inventory: []
+                }
             })
 
             const [ dbContents ] = await db.client.query(selectCharacterByIdSql, {
-                replacements: { id: result.id },
+                replacements: { id: result.body.character.id },
                 mapToModel: true,
                 model: Character,
                 type: QueryTypes.SELECT
             })
-            expect(dbContents.dataValues).toEqual(result.toJSON()) 
-        })
-    })
-
-    describe('update', () => {
-        
-        beforeEach(async () => {
-            await db.client.query(truncateCharacterSql)
+            expect(dbContents.dataValues).toEqual(result.body.character) 
         })
 
-        afterEach(async () => {
-            await db.client.query(truncateCharacterSql)
-        })
-    
         test('should update an existing character', async () => {
             
             const character: Partial<Character> = {
@@ -76,21 +71,25 @@ describe('character controller', () => {
                 type: QueryTypes.INSERT
             })
 
-            const updatedCharacter: CharacterAttributes = {
-                id: character.id as number,
-                name:  faker.name.fullName(),
+            const updatedCharacter = {
+                name: character.name as string,
                 age: faker.datatype.number({min: 0, max: 100}),
                 createdAt: new Date(), 
                 updatedAt: new Date()
             }
 
-            const result = await characters.update(updatedCharacter)
-            expect(result).toMatchObject<Partial<Character>>({
-                id: character.id,
-                name: updatedCharacter.name,
-                age: updatedCharacter.age,
-                createdAt: character.createdAt,  // createdAt should not change
-                updatedAt: expect.any(Date)      // updatedAt will be determined by Sequelize
+            const result = await characters.upsert(updatedCharacter)
+            expect(result).toMatchObject({
+                body: {
+                    character: {
+                        id: character.id,
+                        name: updatedCharacter.name,
+                        age: updatedCharacter.age,
+                        createdAt: character.createdAt,  // createdAt should not change
+                        updatedAt: expect.any(Date)      // updatedAt will be determined by Sequelize
+                    },
+                    inventory: []
+                }             
             })
 
             const [ dbContents ] = await db.client.query<Character>(selectCharacterByIdSql, {
@@ -99,7 +98,8 @@ describe('character controller', () => {
                 model: Character,
                 type: QueryTypes.SELECT
             })
-            expect(dbContents.dataValues).toEqual(result.toJSON())
+
+            expect(dbContents.character).toEqual(result.body.character)
         })
     })
 
