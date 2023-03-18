@@ -1,8 +1,8 @@
 import supertest from 'supertest'
-import router from '../../../src/routes/character.routes'
+import router from '../../src/router'
 import { Express } from 'express-serve-static-core'
 import { createServer } from '../../src/server'
-import { characters } from '../../../src/controllers'
+import { characters } from '../../src/controller'
 import { CharacterCreationAttributes } from '../../src/models/character.model'
 
 let server: Express;
@@ -13,12 +13,12 @@ beforeAll(() => {
 
 describe('character routes', () => {
  
-    describe('GET /', () => {      
+    describe('GET /characters', () => {      
         test('should return 200 and an array of characters', async () => {
             characters.findAll = jest.fn().mockResolvedValue(['found some records'])
             
             await supertest(server)
-                .get('/')
+                .get('/characters')
                 .expect(200)
                 .then(res => {
                     expect(res.body.length).toBeGreaterThan(0)
@@ -29,19 +29,19 @@ describe('character routes', () => {
             characters.findAll = jest.fn().mockResolvedValue([]) 
             
             await supertest(server)
-                .get('/')
+                .get('/characters')
                 .expect(204)
         })
     })
     
-    describe('GET /:id', () => {    
+    describe('GET /characters/:id', () => {    
         test('should return 200 and character matching id', async () => {
             
             const characterId = 1234
             characters.findById = jest.fn().mockResolvedValue({id: characterId})
             
             await supertest(server)
-                .get(`/${characterId}`)
+                .get(`/characters/${characterId}`)
                 .expect(200)
                 .then(res => {
                     expect(res.body).toMatchObject({id: characterId})
@@ -54,7 +54,7 @@ describe('character routes', () => {
             const expectedError = `character with id ${characterId} not found`
             
             await supertest(server)
-                .get(`/${characterId}`)
+                .get(`/characters/${characterId}`)
                 .expect(404)
                 .then(res => {
                     expect((res.error as any).text).toEqual(expectedError)
@@ -62,7 +62,7 @@ describe('character routes', () => {
         })
     })
 
-    describe('POST /', () => {
+    describe('POST /characters', () => {
         test('should return 201 and created character', async () => {
             
             const newCharacter: CharacterCreationAttributes = {
@@ -70,12 +70,30 @@ describe('character routes', () => {
                 age: 20
             }
 
-            characters.create = jest.fn().mockResolvedValue({id: 0, ...newCharacter})            
+            characters.upsert = jest.fn().mockResolvedValue({status: 201, body: {id: 0, ...newCharacter}})            
 
             await supertest(server)
-                .post(`/`)
+                .post(`/characters`)
                 .send(newCharacter)
                 .expect(201)
+                .then(res => {
+                    expect(res.body).toEqual({id: 0, ...newCharacter})
+                })
+        })
+
+        test('should return 200 and updated character', async () => {
+            
+            const newCharacter: CharacterCreationAttributes = {
+                name: 'name',
+                age: 20
+            }
+
+            characters.upsert = jest.fn().mockResolvedValue({status: 200, body: {id: 0, ...newCharacter}})            
+
+            await supertest(server)
+                .post(`/characters`)
+                .send(newCharacter)
+                .expect(200)
                 .then(res => {
                     expect(res.body).toEqual({id: 0, ...newCharacter})
                 })
