@@ -1,23 +1,53 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, HasMany } from 'sequelize-typescript';
-import { CharacterAttributes, CharacterCreationAttributes } from '../@types/character.types';
+import { ModelAttributeColumnOptions } from 'sequelize';
+import { Table, Column, Model, HasMany, DataType } from 'sequelize-typescript';
+import { Character as CharacterCreationAttributes} from '../@types/character.types';
 import { Inventory } from './inventory.model';
 
-@Table({tableName: 'characters'})
-class Character extends Model<CharacterAttributes, CharacterCreationAttributes> implements CharacterAttributes{
+interface CharacterAttributes extends CharacterCreationAttributes {
+    id: number
+}
+
+type CharacterKeys = keyof CharacterAttributes
+
+interface ColumnOptions extends ModelAttributeColumnOptions {
+    field: string
+}
+
+const tableDefinition = {
+    tableName: 'characters'
+}
+
+const columnDefinition: Record<CharacterKeys, ColumnOptions> = {
+    id: {
+        primaryKey: true,
+        field: 'id',
+        autoIncrement: true,
+        type: DataType.INTEGER
+    },
+    name: {
+        field: 'name',
+        type: DataType.STRING
+    },
+    age: {
+        field: 'age',
+        type: DataType.INTEGER
+    }
+}
+
+@Table(tableDefinition)
+class Character extends Model<CharacterAttributes, CharacterCreationAttributes> implements CharacterAttributes {
     
-    @PrimaryKey
-    @AutoIncrement
-    @Column
+    @Column(columnDefinition.id)
     id!: number
 
-    @Column
+    @Column(columnDefinition.name)
     name!: string
 
-    @Column
+    @Column(columnDefinition.age)
     age!: number
 
     @HasMany(() => Inventory)
     inventory!: Inventory[]
 }
 
-export { Character }
+export { Character, CharacterAttributes, CharacterCreationAttributes }

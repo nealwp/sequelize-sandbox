@@ -1,6 +1,9 @@
-import { CharacterAttributes, CharacterController, CharacterCreationAttributes } from "../@types/character.types";
+import { CharacterAttributes, CharacterCreationAttributes } from "../models/character.model";
 import { Inventory, Weapon } from "../models";
 import { Character } from "../models/character.model";
+import { Controller } from "../@types/controller.types";
+
+interface CharacterController extends Controller<Character, CharacterAttributes, CharacterCreationAttributes> {}
 
 const create = async(character: CharacterCreationAttributes) => {
     return await Character.create(character)

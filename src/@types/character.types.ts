@@ -1,15 +1,4 @@
-import { Optional } from 'sequelize';
-import { Character } from '../models';
-import { Controller } from './controller.types';
-
-interface CharacterAttributes {
-    id: number,
+export type Character = {
     name: string,
     age: number
 }
-
-interface CharacterCreationAttributes extends Optional<CharacterAttributes, 'id'> {}
-
-interface CharacterController extends Controller<Character, CharacterAttributes, CharacterCreationAttributes> {}
-
-export {CharacterAttributes, CharacterCreationAttributes, CharacterController }
