@@ -6,7 +6,7 @@ on:
 jobs:
   unit:
     name: Run Unit Tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Service
         uses: actions/checkout@main
@@ -17,11 +17,11 @@ jobs:
 
   integration:
     name: Run Integration Tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Install Dependencies
-        run: npm ci
       - name: Checkout Service
         uses: actions/checkout@main
+      - name: Install Dependencies
+        run: npm ci
       - name: Run Integration Tests
         run: npm run test:integration
