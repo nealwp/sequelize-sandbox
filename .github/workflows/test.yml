@@ -10,17 +10,18 @@ jobs:
     steps:
       - name: Checkout Service
         uses: actions/checkout@main
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      - name: Install Dependencies
+        run: npm ci
       - name: Run Unit Tests
         run: npm test
 
-#  integration:
-#    name: Run Integration Tests
-#    runs-on: ubuntu-20.04
-#    steps:
-#      - name: Checkout Service
-#        uses: actions/checkout@main
-#      - name: Run Integration Tests
-#        run: npm run test:integration
+  integration:
+    name: Run Integration Tests
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install Dependencies
+        run: npm ci
+      - name: Checkout Service
+        uses: actions/checkout@main
+      - name: Run Integration Tests
+        run: npm run test:integration
