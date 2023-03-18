@@ -1,6 +1,7 @@
 import { ModelAttributeColumnOptions } from 'sequelize';
-import { Table, Column, Model, HasMany, DataType, TableOptions, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { Character as CharacterCreationAttributes} from '../@types/character.types';
+import { Follower } from './follower.model';
 import { Inventory } from './inventory.model';
 
 interface CharacterAttributes extends CharacterCreationAttributes {
@@ -66,6 +67,9 @@ class Character extends Model<CharacterAttributes, CharacterCreationAttributes> 
 
     @HasMany(() => Inventory)
     inventory!: Inventory[]
+
+    @HasMany(() => Follower)
+    followers!: Follower[]
 }
 
 export { Character, CharacterAttributes, CharacterCreationAttributes }
