@@ -1,20 +1,106 @@
 # Models
-The models form the core of a Sequelize-based app - controllers, types, endpoints all blossom out of the data models. They're also a pain in the butt. They always seem to function, just never the way you want them to.
+The models form the core of a Sequelize-based app. They're also a pain in the butt. They always seem to function, just never the way you want them to.
 
-The goal here is to lay down a straightforward strategy for covering the basic use cases so they *just work* the first time.
+The goal here is to lay down a straightforward strategy for covering the basic use cases so they *just work* the first time. We'll start with an example and explain each part.
 
 ## A Basic Model
 ```typescript
-import { Table, Column, Model, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
-import { CharacterAttributes, CharacterCreationAttributes } from '../@types/character.types';
+// character.model.ts
 
-@Table({tableName: 'characters'})
+import { Table, Column, Model, CreatedAt, UpdatedAt, DataType } from 'sequelize-typescript';
+import { Character as CharacterCreationAttributes} from '../@types/character.types';
+
+interface CharacterAttributes extends CharacterCreationAttributes {
+    id: number,
+    createdAt: Date,
+    updatedAt: Date
+}
+
+interface ColumnOptions extends ModelAttributeColumnOptions {
+    field: string
+}
+
+type CharacterKeys = keyof CharacterAttributes
+
+const columnDefinition: Record<CharacterKeys, ColumnOptions> = {
+    id: {
+        primaryKey: true,
+        field: 'id',
+        autoIncrement: true,
+        type: DataType.INTEGER
+    },
+    name: {
+        field: 'name',
+        type: DataType.STRING
+    },
+    age: {
+        field: 'age',
+        type: DataType.INTEGER
+    },
+    createdAt: {
+        field: 'created_at',
+        type: DataType.DATE
+    },
+    updatedAt: {
+        field: 'updated_at',
+        type: DataType.DATE
+    }
+}
+
+const tableDefinition = {
+    tableName: 'character'
+}
+
+@Table(tableDefinition)
 class Character 
 extends Model<CharacterAttributes, CharacterCreationAttributes> 
 implements CharacterAttributes {
     
-    @PrimaryKey
-    @AutoIncrement
+    @Column(columnDefinition.id)
+    id!: number
+
+    @Column(columnDefinition.name)
+    name!: string
+
+    @Column(columnDefinition.age)
+    age!: number
+    
+    @Column(columnDefinition.createdAt)
+    createdAt!: Date
+    
+    @Column(columnDefinition.updatedAt)
+    updatedAt!: Date
+
+}
+```
+
+## Imports
+
+## Attributes
+
+If the `CreationAttributes` are the core type, the `Attributes` interface is the core type plus the extra model stuff, like primary keys, foreign keys, and data from child tables that is meant to be consumed along with the parent record. Think of this as the data type that will be returned when you call the GET endpoint for the `Character` resource, i.e. `GET /character/:id`. 
+
+This interface will be used to help us define the Sequelize model, as well as properly type controller inputs and output. 
+
+```typescript
+interface CharacterAttributes extends CharacterCreationAttributes {
+    id: number,         // generally, all models will have an id
+    createdAt: Date,
+    updatedAt: Date   
+    ...    
+}
+```
+
+## Model Declaration
+
+```typescript
+// character.model.ts
+
+@Table({tableName: 'character'})
+class Character 
+extends Model<CharacterAttributes, CharacterCreationAttributes> 
+implements CharacterAttributes {
+    
     @Column
     id!: number
 
@@ -27,17 +113,40 @@ implements CharacterAttributes {
 }
 ```
 
-First of all, *never* do those newlines for `class...extends...implements`.  Horizontal scroll bars make for godawful code examples. You're welcome.
+First of all, *don't* do those newlines for `class...extends...implements`.  Horizontal scroll bars make for godawful code examples. You're welcome.
 
 Second of all, *always* use that `implements` with the model attributes. This says "my model has *at least* the same properties as my interface." I haven't found a good way to do "my model has *these and only these* properties from my interface", so `implements` is the next best thing. 
 
 If you leave off `implements`, you'll get no TypeScript errors when your model is missing properties or using the wrong types. Rather unhelpful.
 
-Now, what's happening here? We have a Character model. If you have a thing for cognitive cartography, you can mentally map **model** to **database table**. In this case our table would look like this:
+Now, what's happening here? We have a Character model. If you have a thing for cognitive cartography, you can mentally map **model** to **database table**. In this case our table would look like this (*data added for fun*):
 
-|id|name|age|
-|-|-|-|
-|-|-|-|
+<div align="center">
+    <table>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>age</th>
+            <th>created_at</th>
+            <th>updated_at</th>
+        </tr>
+        <tr style="text-align: center;">
+            <td>1</td>
+            <td>Bob</td>
+            <td>31</td>
+            <td>3/18/2023</td>
+            <td>3/18/2023</td>
+        </tr>
+        <tr style="text-align: center;">
+            <td>2</td>
+            <td>Alice</td>
+            <td>41</td>
+            <td>3/18/2023</td>
+            <td>3/18/2023</td>
+        </tr>
+    </table>
+</div>
+
 
 ## @Table, @Column, @etc
 
@@ -45,52 +154,65 @@ Note that these decorators don't come from Sequelize, but rather from  `sequeliz
 
 Even though it's optional, always give your table a name. If you don't, someone else will, and some ~~people~~ libraries can have really kooky ideas about how to name a table.    
 ```typescript
-@Table({tableName: 'characters'})
+@Table({tableName: 'character'})
 ```
 
+## Making Migrations Easy
+
+We can enhance this model pattern by creating a column definition object:
+
+```typescript
+/* "field" is optional by default, this makes it required */
+interface ColumnOptions extends ModelAttributeColumnOptions {
+    field: string
+}
+
+/* this is set up for the "columnDefinition" object */
+type CharacterKeys = keyof CharacterAttributes
+
+/* the type here forces us to implement a column for every attribute */
+const columnDefinition: Record<CharacterKeys, ColumnOptions> = {
+    id: {
+        primaryKey: true,
+        field: 'id',
+        autoIncrement: true,
+        type: DataType.INTEGER
+    },
+    name: {
+        field: 'name',
+        type: DataType.STRING
+    },
+    age: {
+        field: 'age',
+        type: DataType.INTEGER
+    }
+}
+```
+
+We use this object in our `@Column` decorators:
+
+```typescript
+@Table({tableName: 'character'})
+class Character extends Model<CharacterAttributes, CharacterCreationAttributes> 
+implements CharacterAttributes {
+    
+    @Column(columnDefinition.id)
+    id!: number
+
+    @Column(columnDefinition.name)
+    name!: string
+
+    @Column(columnDefinition.age)
+    age!: number
+
+}
+```
+
+Doing this will also make our Umzug migrations much easier and cleaner. We can export our column definition and import for use in our migrations.
 
 ## Adding A Relation 
 
 ## Stuff that used to be in @types
-
-The types behind each model follow a pattern:
-
-```typescript
-// example.types.ts
-
-import { Optional } from 'sequelize';
-import { Example } from '../models';
-import { Controller } from './controller.types';
-
-/* Attributes */
-interface ExampleAttributes {
-    id: number,
-    ...    
-}
-
-/* Creation Attributes */
-interface ExampleCreationAttributes extends Optional<ExampleAttributes, 'id'> {}
-
-/* Controller Interface */
-interface ExampleController extends Controller<Example, ExampleAttributes, ExampleCreationAttributes> {}
-```
-
-## Attributes
-
-This defines the basic data model. Think of this as the data type that will be returned when you call the GET endpoint for the `Example` resource, i.e. `GET /example/:id`. 
-
-This interface should also match the Sequelize model in `example.model.ts`, minus the created/updated/deleted dates that are added by Sequelize. 
-
-```typescript
-interface ExampleAttributes {
-    id: number,         // generally, all models will have an id
-    name: string,
-    friends: Friend[]   // you can also include other model types  
-    ...    
-}
-```
-Note that `Friend` would be a **model** imported from `friend.model.ts`, not the `FriendAttributes` type from `friend.types.ts`  
-
 
 ## Creation Attributes
 
@@ -101,36 +223,3 @@ interface ExampleCreationAttributes extends Optional<ExampleAttributes, 'id'> {}
 ```
 
 If you have multiple properties that need to be optional (such as a foreign key), you can union them like so:
-
-```typescript
-interface ExampleCreationAttributes extends Optional<ExampleAttributes, 'id' | 'anotherId'> {}
-```
-
-## Controller Interface
-
-We expect a 1:1:1 relationship between Type:Model:Controller, therefore we can go ahead and create a controller interface for this model.
-
-```typescript
-interface ExampleController extends Controller<Example, ExampleAttributes, ExampleCreationAttributes> {}
-```
-
-The model controller extends the generic controller interface, which defines the basic CRUD operations.
-
-```typescript
-// controller.types.ts
-
-interface Controller<T, A, C> {
-    create: (resource: C) => Promise<T>,
-    update: (resource: A) => Promise<T>,
-    findById: (id: number) => Promise<T>,
-    findAll: () => Promise<T[]>
-}
-```
-
-If you need additional methods for you model controller, simply add their function type expressions to the interface:
-
-```typescript
-interface ExampleController extends Controller<Example, ExampleAttributes ExampleCreationAttributes> {
-    findExampleByName: (name: string) => Promise<Example>
-}
-```

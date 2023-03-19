@@ -1,14 +1,15 @@
 # Sequelize Sandbox
 
-This repo is an example of using Sequelize, TypeScript, and Express. Each directory has its own README.md file to serve as documentation. 
+This repo is an example of using Sequelize, TypeScript, and Express. Each directory has its own README.md file to serve as documentation.
 
 The goal here is to provide simple examples for using Sequelize, as well as establishing useful patterns to follow in similar projects.
 
-Following the setup will give you a running Express API with a persistent PostgreSQL database via Docker. From there, you can experiment with creating new models, controller methods, routes, etc. 
+Following the setup will give you a running Express API with a persistent PostgreSQL database via Docker. From there, you can experiment with creating new models, controller methods, routes, etc.
 
 Feel free to fork this repo as a starting point for a project of your own.
 
 ## Project Navigation
+
 - [**src**](./src)
 - [**Types**](./src/@types)
 - [**Controllers**](./src/controllers)
@@ -18,39 +19,102 @@ Feel free to fork this repo as a starting point for a project of your own.
 ## Set up
 
 1. Clone this repo
-    ```bash
-    git clone git@github.com:nealwp/sequelize-sandbox.git
-    ```
+
+   ```bash
+   git clone git@github.com:nealwp/sequelize-sandbox.git
+   ```
 
 1. Run install
-    ```bash
-    npm i
-    ```
+
+   ```bash
+   npm i
+   ```
 
 1. Start the local db (requires Docker)
-    ```bash
-    npm run db:start    # data will persist in Docker volume 'sequelize-pgdata'
-    ```
+
+   ```bash
+   npm run db:start    # data will persist in Docker volume 'sequelize-pgdata'
+   ```
 
 1. Run the dev server
-    ```bash
-    npm run dev
-    ```
+
+   ```bash
+   npm run dev
+   ```
 
 1. When you're finished/want to stop the database, run
-    ```bash
-    npm run db:stop
-    ```
+   ```bash
+   npm run db:stop
+   ```
 
 - You can import the Postman collection to view and use available endpoints.
 - You can also connect to the database on `localhost:5432` via psql or pgAdmin, using the following credentials:
-    - User: `postgres`
-    - Password: `postgres`
-    - Database Name: `scratch`
+  - User: `postgres`
+  - Password: `postgres`
+  - Database Name: `scratch`
+
+## Application Model
+
+<div align='center' style="margin-top: 10px; margin-bottom: 10px;">
+    <div style="
+            height: 50px;
+            width: 200px; 
+            background-color: #222; 
+            border-color: gray; 
+            border-width: 1px; 
+            border-style: solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;"
+        >Route Handlers</div>
+    <div style="
+        height: 50px; 
+        width: 200px; 
+        background-color: #026e00; 
+        border-color: gray; 
+        border-width: 1px; 
+        border-style: solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2px;"
+        >Controller</div>
+    <div style="
+        height: 50px; 
+        width: 200px; 
+        background-color: #58a6ff; 
+        border-color: gray; 
+        border-width: 1px; 
+        border-style: solid; display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #111;
+        margin-top: 2px"
+        >Models</div>
+    <div style="
+        height: 50px; 
+        width: 200px;  
+        background-color: #336791; 
+        border-color: gray; 
+        border-width: 1px; 
+        border-style: solid; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2px"
+    >Database</div>
+</div>
+
+This application is structured as follows:
+
+* Route handlers serve as the public interface. They are responsible for receiving and responding to HTTP requests. Route handlers call methods on the controller, and should have no direct interaction with models or the database.
+
+* The controller provides an interface for interacting with models. It is independent from the route handlers
 
 ## Data Model
 
 The example code in this project is meant to represent a basic inventory system for a game. There are three models to depict this:
+
 1. Characters
 1. Inventory
 1. Weapons
@@ -79,6 +143,7 @@ erDiagram
     }
 
 ```
+
 - A character can be assigned zero or exactly one inventory
 - An inventory can be assigned to zero or exactly one character
 - A weapon can belong to zero or exactly one inventory
@@ -89,9 +154,8 @@ The model is deliberately simple, as the goal here is to give concrete examples 
 
 ## Disclaimer
 
-The documentation in this repo is opinionated; you will see things like *never do X*, *always do Y*, and *there should be Z*.  I'm well aware that this is not the only way - or even the best way - to logically structure a Sequelize/Express project. However, **it is a way that works**, and works well enough to justify being opinionated about it.
+The documentation in this repo is opinionated; you will see things like _never do X_, _always do Y_, and _there should be Z_. I'm well aware that this is not the only way - or even the best way - to logically structure a Sequelize/Express project. However, **it is a way that works**, and works well enough to justify being opinionated about it.
 
-These opinions may be interpreted as rules. If it proves useful for you to follow them - do so. Should you find yourself in a situation where breaking these "rules" makes more sense than following them - great! Do that instead. 
+These opinions may be interpreted as rules. If it proves useful for you to follow them - do so. Should you find yourself in a situation where breaking these "rules" makes more sense than following them - great! Do that instead.
 
 I am confident in your ability to use your noggin.
-
