@@ -48,7 +48,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Han Solo\",\n    \"age\": 34\n}",
+					"raw": "{\n    \"character\": {\n        \"name\": \"Luke Skywalker\",\n        \"age\": 35\n    },\n    \"missions\": [\n        {\n            \"mission\": {\n                \"name\": \"locate the rebel base\",\n                \"status\": \"in progress\"\n            },\n            \"missionTasks\": [\n                {\n                    \"sequence\": 0,\n                    \"task\": \"speak to the villagers\",\n                    \"status\": \"complete\"\n                },\n                {\n                    \"sequence\": 1,\n                    \"task\": \"travel through the jungle\",\n                    \"status\": \"in progress\"\n                }\n            ] \n        },\n        {\n            \"mission\": {\n                \"name\": \"gather ingredients for the medicine\",\n                \"status\": \"complete\"\n            },\n            \"missionTasks\": [\n                {\n                    \"sequence\": 0,\n                    \"task\": \"gather snowberry\",\n                    \"status\": \"complete\"\n                },\n                {\n                    \"sequence\": 1,\n                    \"task\": \"gather greenleaf\",\n                    \"status\": \"complete\"\n                }\n            ] \n        }\n    ], \n    \"inventory\": [\n        {\n            \"weapons\": [\n                {\n                    \"name\": \"blaster\",\n                    \"type\": \"ranged\",\n                    \"damage\": 25\n                },\n                {\n                    \"name\": \"stun club\",\n                    \"type\": \"melee\",\n                    \"damage\": 50\n                }\n            ]\n        }     \n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -62,137 +62,6 @@
 					],
 					"path": [
 						"characters"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "inventory",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{localhost}}/inventory",
-					"host": [
-						"{{localhost}}"
-					],
-					"path": [
-						"inventory"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "inventory",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"characterId\": 10\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{localhost}}/inventory",
-					"host": [
-						"{{localhost}}"
-					],
-					"path": [
-						"inventory"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "inventory/:id",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{localhost}}/inventory/3",
-					"host": [
-						"{{localhost}}"
-					],
-					"path": [
-						"inventory",
-						"3"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "weapons",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{localhost}}/weapons",
-					"host": [
-						"{{localhost}}"
-					],
-					"path": [
-						"weapons"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "weapons",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"blaster\",\n    \"type\": \"ranged\",\n    \"damage\": 30\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{localhost}}/weapons",
-					"host": [
-						"{{localhost}}"
-					],
-					"path": [
-						"weapons"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "weapons/inventory",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id\": 1,\n    \"inventoryId\": 3\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{localhost}}/weapons/inventory",
-					"host": [
-						"{{localhost}}"
-					],
-					"path": [
-						"weapons",
-						"inventory"
 					]
 				}
 			},
