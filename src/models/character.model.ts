@@ -2,6 +2,7 @@ import { ModelAttributeColumnOptions } from 'sequelize';
 import { Table, Column, Model, HasMany, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { Character as CharacterCreationAttributes} from '../@types/character.types';
 import { Inventory } from './inventory.model';
+import { Mission } from './mission.model';
 
 interface CharacterAttributes extends CharacterCreationAttributes {
     id: number,
@@ -66,6 +67,9 @@ class Character extends Model<CharacterAttributes, CharacterCreationAttributes> 
 
     @HasMany(() => Inventory)
     inventory!: Inventory[]
+
+    @HasMany(() => Mission)
+    missions!: Mission[]
 
     // this is to handle the input/response payload
     @Column({

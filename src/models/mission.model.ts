@@ -12,12 +12,13 @@ import {
 
 import { Mission as MissionAPI } from '../@types/mission.types'
 import { ModelAttributeColumnOptions } from 'sequelize';
+import { Character } from './character.model';
+import { MissionTask } from './mission-task.model';
 
 interface MissionAttributes extends MissionAPI {
     id: number;
-    createdBy: string;
+    characterId:  number;
     createdDate: Date;
-    updatedBy: string;
     updatedDate: Date;
 }
 
@@ -37,6 +38,14 @@ export const columnDefinition: Record<MissionKeys, ColumnOptions> = {
         type: DataType.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+    },
+    characterId: {
+        field: "character_id",
+        type: DataType.INTEGER,
+        references: {
+            model: Character,
+            key: 'id'
+        }
     },   
 	name: {
 		field: 'name',
@@ -46,18 +55,9 @@ export const columnDefinition: Record<MissionKeys, ColumnOptions> = {
 		field: 'status',
 		type: DataType.STRING
 	},
-
-    createdBy: {
-        field: "created_by",
-        type: DataType.STRING,
-    },
     createdDate: {
         field: "created_date",
         type: DataType.DATE,
-    },
-    updatedBy: {
-        field: "updated_by",
-        type: DataType.STRING,
     },
     updatedDate: {
         field: "updated_date",
@@ -70,24 +70,25 @@ export class Mission extends Model<MissionAttributes> implements MissionAttribut
     @Column(columnDefinition.id)
     id!: number;
 
+    @ForeignKey(() => Character)
+    @Column(columnDefinition.characterId)
+    characterId!: number;
+
 	@Column(columnDefinition.name)
 	name!: string
 
 	@Column(columnDefinition.status)
 	status!: string
 
-    @Column(columnDefinition.createdBy)
-    createdBy!: string;
-
     @CreatedAt
     @Column(columnDefinition.createdDate)
     createdDate!: Date;
 
-    @Column(columnDefinition.updatedBy)
-    updatedBy!: string;
-
     @UpdatedAt
     @Column(columnDefinition.updatedDate)
     updatedDate!: Date;
+
+    @HasMany(() => MissionTask)
+    missionTasks!: MissionTask[]
 }
     

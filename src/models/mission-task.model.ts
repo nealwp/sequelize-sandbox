@@ -12,12 +12,12 @@ import {
 
 import { MissionTask as MissionTaskAPI } from '../@types/mission-task.types'
 import { ModelAttributeColumnOptions } from 'sequelize';
+import { Mission } from './mission.model';
 
 interface MissionTaskAttributes extends MissionTaskAPI {
     id: number;
-    createdBy: string;
+    missionId: number;
     createdDate: Date;
-    updatedBy: string;
     updatedDate: Date;
 }
 
@@ -37,6 +37,14 @@ export const columnDefinition: Record<MissionTaskKeys, ColumnOptions> = {
         type: DataType.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+    },
+    missionId: {
+        field: "mission_id",
+        type: DataType.INTEGER,
+        references: {
+            model: Mission,
+            key: "id"
+        }
     },   
 	sequence: {
 		field: 'sequence',
@@ -51,17 +59,9 @@ export const columnDefinition: Record<MissionTaskKeys, ColumnOptions> = {
 		type: DataType.STRING
 	},
 
-    createdBy: {
-        field: "created_by",
-        type: DataType.STRING,
-    },
     createdDate: {
         field: "created_date",
         type: DataType.DATE,
-    },
-    updatedBy: {
-        field: "updated_by",
-        type: DataType.STRING,
     },
     updatedDate: {
         field: "updated_date",
@@ -74,6 +74,10 @@ export class MissionTask extends Model<MissionTaskAttributes> implements Mission
     @Column(columnDefinition.id)
     id!: number;
 
+    @ForeignKey(() => Mission)
+    @Column(columnDefinition.missionId)
+    missionId!: number;
+
 	@Column(columnDefinition.sequence)
 	sequence!: number
 
@@ -83,15 +87,9 @@ export class MissionTask extends Model<MissionTaskAttributes> implements Mission
 	@Column(columnDefinition.status)
 	status!: string
 
-    @Column(columnDefinition.createdBy)
-    createdBy!: string;
-
     @CreatedAt
     @Column(columnDefinition.createdDate)
     createdDate!: Date;
-
-    @Column(columnDefinition.updatedBy)
-    updatedBy!: string;
 
     @UpdatedAt
     @Column(columnDefinition.updatedDate)
