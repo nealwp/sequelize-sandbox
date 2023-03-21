@@ -41,6 +41,7 @@ export const columnDefinition: Record<MissionTaskKeys, ColumnOptions> = {
     missionId: {
         field: "mission_id",
         type: DataType.INTEGER,
+        onDelete: 'CASCADE',
         references: {
             model: Mission,
             key: "id"

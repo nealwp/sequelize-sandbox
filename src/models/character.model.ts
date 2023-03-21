@@ -1,6 +1,7 @@
 import { ModelAttributeColumnOptions } from 'sequelize';
 import { Table, Column, Model, HasMany, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { Character as CharacterCreationAttributes} from '../@types/character.types';
+import { CharacterPayload } from '../@types/payload.types';
 import { Inventory } from './inventory.model';
 import { Mission } from './mission.model';
 
@@ -46,7 +47,7 @@ export const columnDefinition: Record<CharacterKeys, ColumnOptions> = {
 }
 
 @Table(tableDefinition)
-class Character extends Model<CharacterAttributes, CharacterCreationAttributes> implements CharacterAttributes {
+class Character extends Model<CharacterAttributes, CharacterPayload> implements CharacterAttributes {
     
     @Column(columnDefinition.id)
     id!: number
@@ -87,7 +88,7 @@ class Character extends Model<CharacterAttributes, CharacterCreationAttributes> 
         },
         set(character: CharacterCreationAttributes) {
             this.setDataValue('name', character.name);
-            this.setDataValue('age',character.age);
+            this.setDataValue('age', character.age);
         }
     })
     character!: CharacterAttributes

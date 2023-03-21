@@ -7,15 +7,15 @@ import {
     CreatedAt,
     UpdatedAt,
     ForeignKey,
-    HasMany,
+    HasMany
 } from 'sequelize-typescript';
 
-import { Mission as MissionAPI } from '../@types/mission.types'
+import { Mission as MissionCreationAttributes } from '../@types/mission.types'
 import { ModelAttributeColumnOptions } from 'sequelize';
 import { Character } from './character.model';
 import { MissionTask } from './mission-task.model';
 
-interface MissionAttributes extends MissionAPI {
+interface MissionAttributes extends MissionCreationAttributes {
     id: number;
     characterId:  number;
     createdDate: Date;
@@ -42,6 +42,7 @@ export const columnDefinition: Record<MissionKeys, ColumnOptions> = {
     characterId: {
         field: "character_id",
         type: DataType.INTEGER,
+        onDelete: 'CASCADE',
         references: {
             model: Character,
             key: 'id'
@@ -66,7 +67,7 @@ export const columnDefinition: Record<MissionKeys, ColumnOptions> = {
 }
 
 @Table(tableDefinition)
-export class Mission extends Model<MissionAttributes> implements MissionAttributes {
+export class Mission extends Model<MissionAttributes, MissionCreationAttributes> implements MissionAttributes {
     @Column(columnDefinition.id)
     id!: number;
 
@@ -88,7 +89,29 @@ export class Mission extends Model<MissionAttributes> implements MissionAttribut
     @Column(columnDefinition.updatedDate)
     updatedDate!: Date;
 
-    @HasMany(() => MissionTask)
+    @HasMany(() => MissionTask, {
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        hooks: true
+    })
     missionTasks!: MissionTask[]
+
+     // this is to handle the input/response payload
+     @Column({
+        field: 'mission',
+        type: DataType.VIRTUAL,
+        get() {
+            const mission = {
+                id: this.get('id') as number,
+                name: this.get('name') as string,
+                characterId: this.get('characterId'),
+                status: this.get('status'),
+                createdDate: this.get('createdDate'),
+                updatedDate: this.get('updatedDate')
+            }
+            return mission
+        },
+    })
+    mission!: MissionAttributes
 }
     

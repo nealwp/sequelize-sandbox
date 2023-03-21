@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { CharacterCreationAttributes } from "./models/character.model";
 import { characters } from "./controller";
+import { CharacterPayload } from "./@types/payload.types";
 
 const router = Router()
 
@@ -26,8 +27,8 @@ router.get('/:id', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-    const character: CharacterCreationAttributes = req.body
-    const result = await characters.upsert(character)
+    const payload: CharacterPayload = req.body
+    const result = await characters.upsert(payload)
     res.status(result.status).json(result.body)
 })
 
