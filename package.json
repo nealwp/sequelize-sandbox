@@ -7,6 +7,7 @@
     "test": "jest ./tests/unit",
     "test:integration": "npm run test-db:start && jest --detectOpenHandles ./tests/integration",
     "dev": "nodemon src/app.ts",
+    "check": "tsc --noEmit",
     "db:start": "docker run --rm --name postgres_sequelize -p 5432:5432 -v sequelize-pgdata:/var/lib/postgresql/data -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=scratch -d postgres",
     "db:stop": "docker stop postgres_sequelize",
     "test-db:start": "docker run --rm --name sequelize_tests -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=scratch -d postgres",
