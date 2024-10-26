@@ -1,41 +1,47 @@
-import { InventoryAttributes, InventoryController, InventoryCreationAttributes } from "../@types/inventory.types";
+import {
+  InventoryAttributes,
+  InventoryController,
+  InventoryCreationAttributes,
+} from "../@types/inventory.types";
 import { Inventory, Weapon } from "../models";
 
 const findAll = async () => {
-    return Inventory.findAll({include: Weapon})
-}
+  return Inventory.findAll({ include: Weapon });
+};
 
 const create = async (inventory: InventoryCreationAttributes) => {
-    return Inventory.create(inventory)
-}
+  return Inventory.create(inventory);
+};
 
 const findById = async (id: number) => {
-    const inventory = await Inventory.findOne({
-        where: { id },
-        include: Weapon
-    })
-    if(!inventory){
-        throw new Error(`Inventory id ${id} not found!`)
-    }
+  const inventory = await Inventory.findOne({
+    where: { id },
+    include: Weapon,
+  });
+  if (!inventory) {
+    throw new Error(`Inventory id ${id} not found!`);
+  }
 
-    return inventory
-}
+  return inventory;
+};
 
 const update = async (inventory: InventoryAttributes) => {
-    const existingInventory = await Inventory.findOne({where: {id: inventory.id}})
-    
-    if(!existingInventory){
-        throw new Error(`Inventory id ${inventory.id} not found!`)
-    }
+  const existingInventory = await Inventory.findOne({
+    where: { id: inventory.id },
+  });
 
-    return await existingInventory.update(inventory)
-}
+  if (!existingInventory) {
+    throw new Error(`Inventory id ${inventory.id} not found!`);
+  }
+
+  return await existingInventory.update(inventory);
+};
 
 const inventory: InventoryController = {
-    findAll,
-    update,
-    create,
-    findById
-}
+  findAll,
+  update,
+  create,
+  findById,
+};
 
-export { inventory }
+export { inventory };
