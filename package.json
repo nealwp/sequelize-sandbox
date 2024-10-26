@@ -10,8 +10,10 @@
         "check": "tsc --noEmit",
         "lint": "npx prettier --check .",
         "format": "npx prettier --write .",
-        "db:start": "docker compose up -d",
-        "db:stop": "docker compose down"
+        "db": "docker compose up -d && npm run db:up",
+        "db:up": "ts-node migration up",
+        "db:stop": "docker compose down",
+        "migrate": "ts-node migration create --name " 
     },
     "author": "nealwp",
     "license": "ISC",
@@ -36,6 +38,7 @@
         "reflect-metadata": "^0.2.2",
         "sequelize": "^6.37.5",
         "sequelize-typescript": "^2.1.6",
-        "typescript": "^5.6.3"
+        "typescript": "^5.6.3",
+        "umzug": "^3.8.2"
     }
 }

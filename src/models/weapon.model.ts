@@ -1,29 +1,43 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { WeaponAttributes, WeaponCreationAttributes, WeaponType } from '../@types/weapon.types';
+import { Table, Column, Model, ForeignKey, DataType } from 'sequelize-typescript';
+import { ColumnOptions } from '../db';
 import { Inventory } from './inventory.model';
 
-@Table({ tableName: 'weapons' })
-class Weapon extends Model<WeaponAttributes, WeaponCreationAttributes> implements WeaponAttributes {
-    @PrimaryKey
-    @AutoIncrement
-    @Column
+interface CreationAttributes {
+    inventoryId: number;
+    name: string;
+    damage: number;
+    type: string;
+}
+
+interface Attributes extends CreationAttributes {
+    id: number;
+}
+
+const columns: ColumnOptions<Attributes> = {
+    id: { field: 'id', type: DataType.INTEGER, autoIncrementIdentity: true, primaryKey: true },
+    inventoryId: { field: 'inventory_id', type: DataType.INTEGER, references: { model: 'inventory', key: 'id' }},
+    name: { field: 'name', type: DataType.STRING },
+    damage: { field: 'damage', type: DataType.FLOAT },
+    type: { field: 'type', type: DataType.STRING },
+}
+
+@Table({ tableName: 'weapon' })
+class Weapon extends Model<Attributes, CreationAttributes> implements Attributes {
+    @Column(columns.id)
     override id!: number;
 
     @ForeignKey(() => Inventory)
-    @Column
+    @Column(columns.inventoryId)
     inventoryId!: number;
 
-    @BelongsTo(() => Inventory)
-    inventory!: Inventory;
-
-    @Column
+    @Column(columns.name)
     name!: string;
 
-    @Column
+    @Column(columns.damage)
     damage!: number;
 
-    @Column
-    type!: WeaponType;
+    @Column(columns.type)
+    type!: string;
 }
 
 export { Weapon };

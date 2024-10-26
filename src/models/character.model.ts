@@ -1,18 +1,31 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, HasMany } from 'sequelize-typescript';
-import { CharacterAttributes, CharacterCreationAttributes } from '../@types/character.types';
+import { ColumnOptions } from '../db';
+import { Table, Column, Model, HasMany, DataType } from 'sequelize-typescript';
 import { Inventory } from './inventory.model';
 
-@Table({ tableName: 'characters' })
-class Character extends Model<CharacterAttributes, CharacterCreationAttributes> implements CharacterAttributes {
-    @PrimaryKey
-    @AutoIncrement
-    @Column
+interface CreationAttributes {
+    name: string;
+    age: number;
+}
+
+interface Attributes extends CreationAttributes {
+    id: number;
+}
+
+const columns: ColumnOptions<Attributes> = {
+    id: { field: 'id', type: DataType.INTEGER, autoIncrementIdentity: true, primaryKey: true },
+    name: { field: 'name', type: DataType.STRING },
+    age: { field: 'age', type: DataType.INTEGER },
+}
+
+@Table({ tableName: 'character' })
+class Character extends Model<Attributes, CreationAttributes> implements Attributes {
+    @Column(columns.id)
     override id!: number;
 
-    @Column
+    @Column(columns.name)
     name!: string;
 
-    @Column
+    @Column(columns.age)
     age!: number;
 
     @HasMany(() => Inventory)

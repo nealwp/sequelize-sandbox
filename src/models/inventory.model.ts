@@ -1,21 +1,33 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
-import { InventoryAttributes, InventoryCreationAttributes } from '../@types/inventory.types';
+import { Table, Column, Model, ForeignKey, HasMany, DataType } from 'sequelize-typescript';
+import { ColumnOptions } from '../db';
 import { Character } from './character.model';
 import { Weapon } from './weapon.model';
 
+interface CreationAttributes {
+    characterId: number;
+}
+
+interface Attributes extends CreationAttributes {
+    id: number;
+}
+
+const columns: ColumnOptions<Attributes> = {
+    id: { field: 'id', type: DataType.INTEGER, autoIncrementIdentity: true, primaryKey: true },
+    characterId: { 
+        field: 'character_id', 
+        type: DataType.INTEGER, 
+        references: { model: 'character', key: 'id' },
+    },
+}
+
 @Table({ tableName: 'inventory' })
-class Inventory extends Model<InventoryAttributes, InventoryCreationAttributes> implements InventoryAttributes {
-    @PrimaryKey
-    @AutoIncrement
-    @Column
+class Inventory extends Model<Attributes, CreationAttributes> implements Attributes {
+    @Column(columns.id)
     override id!: number;
 
     @ForeignKey(() => Character)
-    @Column
+    @Column(columns.characterId)
     characterId!: number;
-
-    @BelongsTo(() => Character)
-    character!: Character;
 
     @HasMany(() => Weapon)
     weapons!: Weapon[];

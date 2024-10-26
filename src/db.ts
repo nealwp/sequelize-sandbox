@@ -1,35 +1,46 @@
+import { ModelAttributeColumnOptions } from 'sequelize';
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
+import { Umzug, SequelizeStorage } from 'umzug';
 import * as models from './models';
 
-const config = {
-    DB_URL: 'localhost',
-    DB_USER: 'postgres',
-    DB_PASS: 'postgres',
-    DB_PORT: 5432,
-    DB_NAME: 'scratch',
-};
+// this is to make explicit column names required, instead of
+// allowing Sequelize to auto-generate them
+export type ColumnOptions<T> = Record<keyof T, ModelAttributeColumnOptions & { field: string}>;
+
+const DB_HOST = 'localhost';
+const DB_USER = 'postgres';
+const DB_PASS = 'postgres';
+const DB_PORT = 5432;
+const DB_NAME = 'sandbox-db';
 
 const dbConfig: SequelizeOptions = {
     dialect: 'postgres',
-    host: config.DB_URL,
-    username: config.DB_USER,
-    password: config.DB_PASS,
-    port: config.DB_PORT,
-    database: config.DB_NAME,
+    host: DB_HOST,
+    username: DB_USER,
+    password: DB_PASS,
+    port: DB_PORT,
+    database: DB_NAME,
     logging: false,
     models: Object.values(models),
 };
 
 const sequelize = new Sequelize(dbConfig);
 
-const initialize = async () => {
-    try {
-        await sequelize.authenticate();
-        await sequelize.sync({ alter: true });
-        console.log('All models were synchronized successfully.');
-    } catch (error) {
-        console.error(`Error initializing database: ${error}`);
-    }
+async function initialize() {
+    return sequelize.authenticate();
 };
 
-export { initialize, sequelize as client };
+const MIGRATION_GLOB = process.env['NODE_ENV'] == 'production' ? `./dist/migrations/*.js` : `./src/migrations/*.ts`;
+
+const umzug = new Umzug({
+    migrations: { glob: MIGRATION_GLOB },
+    context: sequelize.getQueryInterface(),
+    storage: new SequelizeStorage({ sequelize }),
+    logger: console, // log generated queries to console
+});
+
+async function runMigrations() {
+    return umzug.up();
+}
+
+export { initialize, runMigrations, sequelize as client };
