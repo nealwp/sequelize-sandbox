@@ -8,7 +8,7 @@ class Inventory extends Model<InventoryAttributes, InventoryCreationAttributes> 
     @PrimaryKey
     @AutoIncrement
     @Column
-    id!: number;
+    override id!: number;
 
     @ForeignKey(() => Character)
     @Column

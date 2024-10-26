@@ -7,7 +7,7 @@ class Character extends Model<CharacterAttributes, CharacterCreationAttributes> 
     @PrimaryKey
     @AutoIncrement
     @Column
-    id!: number;
+    override id!: number;
 
     @Column
     name!: string;

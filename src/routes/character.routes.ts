@@ -4,7 +4,7 @@ import { characters } from '../controllers';
 
 const router = Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (_, res) => {
     const allCharacters = await characters.findAll();
 
     if (!allCharacters.length) {
@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
     return res.status(200).json(allCharacters);
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const character = await characters.findById(+id);
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
     const character: CharacterCreationAttributes = req.body;
     const createdCharacter = await characters.create(character);
     res.status(201).json(createdCharacter);

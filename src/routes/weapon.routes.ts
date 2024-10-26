@@ -4,7 +4,7 @@ import { WeaponCreationAttributes } from '../@types/weapon.types';
 
 const router = Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (_, res, __) => {
     const allWeapons = await weapons.findAll();
     if (!allWeapons.length) {
         return res.status(204).send();
@@ -12,7 +12,7 @@ router.get('/', async (req, res, next) => {
     return res.status(200).json(allWeapons);
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', async (req, res, _) => {
     const { id } = req.params;
     try {
         const weapon = await weapons.findById(+id);
@@ -23,7 +23,7 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res, _) => {
     const weapon: WeaponCreationAttributes = req.body;
     try {
         const createdWeapon = await weapons.create(weapon);
@@ -34,7 +34,7 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.post('/inventory', async (req, res, next) => {
+router.post('/inventory', async (req, res, _) => {
     const { id, inventoryId } = req.body as { id: number; inventoryId: number };
     try {
         const updatedWeapon = await weapons.addToInventory(id, inventoryId);

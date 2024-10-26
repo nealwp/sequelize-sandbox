@@ -7,7 +7,7 @@ class Weapon extends Model<WeaponAttributes, WeaponCreationAttributes> implement
     @PrimaryKey
     @AutoIncrement
     @Column
-    id!: number;
+    override id!: number;
 
     @ForeignKey(() => Inventory)
     @Column
