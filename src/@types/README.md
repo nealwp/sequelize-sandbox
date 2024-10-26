@@ -44,14 +44,13 @@ Note that `Friend` would be a **model** imported from `friend.model.ts`, not the
 CreationAttributes are the same as Attributes, but with the id set to optional. This allows strong typing for input data, such as payloads to POST endpoints.
 
 ```typescript
-interface ExampleCreationAttributes extends Optional<ExampleAttributes, "id"> {}
+interface ExampleCreationAttributes extends Optional<ExampleAttributes, 'id'> {}
 ```
 
 If you have multiple properties that need to be optional (such as a foreign key), you can union them like so:
 
 ```typescript
-interface ExampleCreationAttributes
-  extends Optional<ExampleAttributes, "id" | "anotherId"> {}
+interface ExampleCreationAttributes extends Optional<ExampleAttributes, 'id' | 'anotherId'> {}
 ```
 
 ## Controller Interface
@@ -59,8 +58,7 @@ interface ExampleCreationAttributes
 We expect a 1:1:1 relationship between Type:Model:Controller, therefore we can go ahead and create a controller interface for this model.
 
 ```typescript
-interface ExampleController
-  extends Controller<Example, ExampleAttributes, ExampleCreationAttributes> {}
+interface ExampleController extends Controller<Example, ExampleAttributes, ExampleCreationAttributes> {}
 ```
 
 The model controller extends the generic controller interface, which defines the basic CRUD operations.
@@ -69,10 +67,10 @@ The model controller extends the generic controller interface, which defines the
 // controller.types.ts
 
 interface Controller<T, A, C> {
-  create: (resource: C) => Promise<T>;
-  update: (resource: A) => Promise<T>;
-  findById: (id: number) => Promise<T>;
-  findAll: () => Promise<T[]>;
+    create: (resource: C) => Promise<T>;
+    update: (resource: A) => Promise<T>;
+    findById: (id: number) => Promise<T>;
+    findAll: () => Promise<T[]>;
 }
 ```
 

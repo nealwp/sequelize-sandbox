@@ -5,10 +5,10 @@
 Setting up integration tests is a pain in the butt, because most integration tests are dependent on state. For example, let's say you want to write an integration test that says _I can update the owner of an inventory record from one character to another._ That's pretty easy, right?
 
 ```typescript
-test("should update the owner of an inventory to a different character id", () => {
-  const newCharacterId = 1234;
-  const result = inventory.update(9999, newCharacterId);
-  expect(result).toEqual({ id: 9999, characterId: 1234 });
+test('should update the owner of an inventory to a different character id', () => {
+    const newCharacterId = 1234;
+    const result = inventory.update(9999, newCharacterId);
+    expect(result).toEqual({ id: 9999, characterId: 1234 });
 });
 ```
 
@@ -17,15 +17,15 @@ Nope, this won't work, because `.update()` is the controller method that wraps t
 Oh, well, that's an easy fix, isn't it? You'll just create the inventory record before you do stuff to it. Problem solved:
 
 ```typescript
-test("should update the owner of an inventory to a different character id", () => {
-  // create the inventory record
-  const sql = `insert into inventory (id) values (9999)`;
-  await db.client.query(sql, { type: QueryTypes.INSERT });
+test('should update the owner of an inventory to a different character id', () => {
+    // create the inventory record
+    const sql = `insert into inventory (id) values (9999)`;
+    await db.client.query(sql, { type: QueryTypes.INSERT });
 
-  // then do the test
-  const newCharacterId = 1234;
-  const result = inventory.update(9999, newCharacterId);
-  expect(result).toEqual({ id: 9999, characterId: 1234 });
+    // then do the test
+    const newCharacterId = 1234;
+    const result = inventory.update(9999, newCharacterId);
+    expect(result).toEqual({ id: 9999, characterId: 1234 });
 });
 ```
 
@@ -38,19 +38,19 @@ Well, per the laws of relational database physics, _you can't do that_. If you w
 So, we're stuck with conjuring up _all_ required state before we can run our test:
 
 ```typescript
-test("should update the owner of an inventory to a different character id", () => {
-  // create the inventory record
-  const inventorySql = `insert into inventory (id) values (9999)`;
-  await db.client.query(inventorySql, { type: QueryTypes.INSERT });
+test('should update the owner of an inventory to a different character id', () => {
+    // create the inventory record
+    const inventorySql = `insert into inventory (id) values (9999)`;
+    await db.client.query(inventorySql, { type: QueryTypes.INSERT });
 
-  // create the character record
-  const characterSql = `insert into characters (id) values (1234)`;
-  await db.client.query(characterSql, { type: QueryTypes.INSERT });
+    // create the character record
+    const characterSql = `insert into characters (id) values (1234)`;
+    await db.client.query(characterSql, { type: QueryTypes.INSERT });
 
-  // and then do the test
-  const newCharacterId = 1234;
-  const result = inventory.update(9999, newCharacterId);
-  expect(result).toEqual({ id: 9999, characterId: 1234 });
+    // and then do the test
+    const newCharacterId = 1234;
+    const result = inventory.update(9999, newCharacterId);
+    expect(result).toEqual({ id: 9999, characterId: 1234 });
 });
 ```
 
@@ -59,27 +59,26 @@ At this point, our test _should_ pass. However, this test still isn't good enoug
 Since we've now slipped to the appropriate level of paranoia, we'll need to verify the change is present **in the actual database**.
 
 ```typescript
-test("should update the owner of an inventory to a different character id", () => {
-  // create the inventory record
-  const inventorySql = `insert into inventory (id) values (9999)`;
-  await db.client.query(inventorySql, { type: QueryTypes.INSERT });
+test('should update the owner of an inventory to a different character id', () => {
+    // create the inventory record
+    const inventorySql = `insert into inventory (id) values (9999)`;
+    await db.client.query(inventorySql, { type: QueryTypes.INSERT });
 
-  // create the character record
-  const characterSql = `insert into characters (id) values (1234)`;
-  await db.client.query(characterSql, { type: QueryTypes.INSERT });
+    // create the character record
+    const characterSql = `insert into characters (id) values (1234)`;
+    await db.client.query(characterSql, { type: QueryTypes.INSERT });
 
-  // and then do the test
-  const newCharacterId = 1234;
-  const result = inventory.update(9999, newCharacterId);
-  expect(result).toEqual({ id: 9999, characterId: 1234 });
+    // and then do the test
+    const newCharacterId = 1234;
+    const result = inventory.update(9999, newCharacterId);
+    expect(result).toEqual({ id: 9999, characterId: 1234 });
 
-  // then check the database for the record
-  const [dbContents] = await db.client.query(
-    `select * from inventory where id = ${result.id}`,
-    { type: QueryTypes.SELECT },
-  );
+    // then check the database for the record
+    const [dbContents] = await db.client.query(`select * from inventory where id = ${result.id}`, {
+        type: QueryTypes.SELECT,
+    });
 
-  expect(dbContents).toEqual(result.toJSON());
+    expect(dbContents).toEqual(result.toJSON());
 });
 ```
 
@@ -110,31 +109,31 @@ Instead, try this approach:
 In practice, it looks like this:
 
 ```typescript
-describe("my controller", () => {
-  beforeAll(() => {
-    // 1. initialize the db
-    // 2. then wipe everything clean
-  });
-
-  afterAll(() => {
-    // 1. wipe everything clean
-  });
-
-  describe("create method", () => {
-    beforeEach(() => {
-      // 1. wipe everything clean
-      // DO NOT do any other arranging here
+describe('my controller', () => {
+    beforeAll(() => {
+        // 1. initialize the db
+        // 2. then wipe everything clean
     });
 
-    afterEach(() => {
-      // 1. wipe everything clean
-      // DO NOT do any other arranging here
+    afterAll(() => {
+        // 1. wipe everything clean
     });
 
-    test("should create a new row", () => {
-      // Arrange everything for THIS test
+    describe('create method', () => {
+        beforeEach(() => {
+            // 1. wipe everything clean
+            // DO NOT do any other arranging here
+        });
+
+        afterEach(() => {
+            // 1. wipe everything clean
+            // DO NOT do any other arranging here
+        });
+
+        test('should create a new row', () => {
+            // Arrange everything for THIS test
+        });
     });
-  });
 });
 ```
 
@@ -168,9 +167,9 @@ Controllers, on the other hand, are precision instruments. They have intimate kn
 
 ## More Thoughts To Organize
 
-- integration tests are complicated, simplify however you can
-- if you can de-scope an integration test back down to a unit test, do so
-- don't retest in an integration test what you already covered in a unit test
-- limit integration tests to "happy path" tests
-- keep what you're _actually_ testing in focus: integration tests are for "do these things work together?", not "have I covered every edge case?"
-- remember that each integration test will couple you to your implementation, so use them wisely
+-   integration tests are complicated, simplify however you can
+-   if you can de-scope an integration test back down to a unit test, do so
+-   don't retest in an integration test what you already covered in a unit test
+-   limit integration tests to "happy path" tests
+-   keep what you're _actually_ testing in focus: integration tests are for "do these things work together?", not "have I covered every edge case?"
+-   remember that each integration test will couple you to your implementation, so use them wisely

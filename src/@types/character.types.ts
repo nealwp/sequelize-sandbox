@@ -1,25 +1,15 @@
-import { Optional } from "sequelize";
-import { Character } from "../models";
-import { Controller } from "./controller.types";
+import { Optional } from 'sequelize';
+import { Character } from '../models';
+import { Controller } from './controller.types';
 
 interface CharacterAttributes {
-  id: number;
-  name: string;
-  age: number;
+    id: number;
+    name: string;
+    age: number;
 }
 
-interface CharacterCreationAttributes
-  extends Optional<CharacterAttributes, "id"> {}
+interface CharacterCreationAttributes extends Optional<CharacterAttributes, 'id'> {}
 
-interface CharacterController
-  extends Controller<
-    Character,
-    CharacterAttributes,
-    CharacterCreationAttributes
-  > {}
+interface CharacterController extends Controller<Character, CharacterAttributes, CharacterCreationAttributes> {}
 
-export {
-  CharacterAttributes,
-  CharacterCreationAttributes,
-  CharacterController,
-};
+export { CharacterAttributes, CharacterCreationAttributes, CharacterController };
