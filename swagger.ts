@@ -7,7 +7,7 @@ const info = {
     description: 'Using Sequelize for Fun and Profit',
 };
 
-const servers = [{ url: 'http://localhost:8000', description: 'localhost' }];
+const servers = [{ url: 'http://localhost:3000', description: 'localhost' }];
 
 const components = { 
     securitySchemes: { 

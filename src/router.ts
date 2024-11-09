@@ -1,12 +1,19 @@
 import { Router } from 'express';
-import PropertyRouter from './property/routes'
+import PropertiesRouter from './properties/routes'
+import shared from './shared';
 
 const router = Router();
 
-router.get('/health', (_, res) => {
+router.get('/', (req, res) => {
+    return res.status(200).json({
+        _links: shared.getHATEOSLinks(req, router)
+    });
+});
+
+router.get('/api/health', (_, res) => {
     return res.status(200);
 });
 
-router.
+router.use('/api/properties', PropertiesRouter);
 
 export default router;
